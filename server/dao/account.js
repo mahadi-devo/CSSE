@@ -1,4 +1,5 @@
-const Sequelize = require('sequelize');
+const bcrypt = require('bcryptjs');
+
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('account', {
     id: {
@@ -11,31 +12,27 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    createdDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
     creditAmount: {
       type: DataTypes.STRING(45),
       allowNull: false,
       defaultValue: "100"
     },
-    updatedDate: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
     passengerId: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {
     sequelize,
     tableName: 'account',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -52,6 +49,11 @@ module.exports = function(sequelize, DataTypes) {
           { name: "passengerId" },
         ]
       },
-    ]
+    ],
+    hooks: {
+      beforeCreate(account) {
+        account.password = account.password &&  bcrypt.hashSync(account.password, 10)
+      }
+    }
   });
 };

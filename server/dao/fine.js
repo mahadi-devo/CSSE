@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('fine', {
     id: {
@@ -9,10 +8,6 @@ module.exports = function(sequelize, DataTypes) {
     },
     amount: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    createdDate: {
-      type: DataTypes.DATE,
       allowNull: false
     },
     accountId: {
@@ -34,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'fine',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
