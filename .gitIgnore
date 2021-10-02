@@ -1,0 +1,7 @@
+server/config/.env
+node_modules/
+server/dsassignment.iml
+.idea
+.vscode
+
+*.log
