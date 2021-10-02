@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+// const User = require("../dao/user.model");
 const ApiError = require("../utils/apiError");
 
 const registerController = async (req, res, next) => {

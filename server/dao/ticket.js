@@ -1,36 +1,40 @@
-const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('payment', {
+  return sequelize.define('ticket', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    amount: {
+    price: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    createdDate: {
-      type: DataTypes.DATE,
+    destination: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
-    updatedDate: {
-      type: DataTypes.DATE,
+    validityPeriod: {
+      type: DataTypes.STRING(45),
       allowNull: false
     },
-    paymentMethodId: {
+    issuedLocation: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    tickettypeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'paymentmethod',
+        model: 'tickettype',
         key: 'id'
       }
     }
   }, {
     sequelize,
-    tableName: 'payment',
-    timestamps: false,
+    tableName: 'ticket',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -41,10 +45,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "payment_paymentMethod_index_fk_idx",
+        name: "ticket_ticketTypeId_index_fk_idx",
         using: "BTREE",
         fields: [
-          { name: "paymentMethodId" },
+          { name: "tickettypeId" },
         ]
       },
     ]

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+// const User = require('../dao/user.model');
 
 exports.authorize = async (req, res, next) => {
   try {

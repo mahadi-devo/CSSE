@@ -1,40 +1,32 @@
-const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('inspection', {
+  return sequelize.define('journey', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    inspectionDate: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    journeyId: {
+    busId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'journey',
+        model: 'bus',
         key: 'id'
       }
     },
-    inspectorId: {
+    routeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'employee',
+        model: 'route',
         key: 'id'
       }
     }
   }, {
     sequelize,
-    tableName: 'inspection',
-    timestamps: false,
+    tableName: 'journey',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -45,17 +37,17 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "inspection_journeyId_index",
+        name: "journey_busId_index_fk_idx",
         using: "BTREE",
         fields: [
-          { name: "journeyId" },
+          { name: "busId" },
         ]
       },
       {
-        name: "inspection_inspectorId_index",
+        name: "journey_routeId_index_fk_idx",
         using: "BTREE",
         fields: [
-          { name: "inspectorId" },
+          { name: "routeId" },
         ]
       },
     ]

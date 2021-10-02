@@ -1,36 +1,32 @@
-const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('route', {
+  return sequelize.define('report', {
     id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true
     },
-    depatureLat: {
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    description: {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    depatureLong: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    destinationLat: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    destinationLong: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    stopCount: {
+    reportTypeId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'reporttype',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
-    tableName: 'route',
-    timestamps: false,
+    tableName: 'report',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -38,6 +34,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "report_reportTypeId_idx",
+        using: "BTREE",
+        fields: [
+          { name: "reportTypeId" },
         ]
       },
     ]

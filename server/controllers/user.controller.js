@@ -1,4 +1,4 @@
-const UserModal = require('../models/user.model');
+const UserModal = require('../dao/user.model');
 const ApiError = require('../utils/apiError');
 
 const addUser = async (req, res, next) => {

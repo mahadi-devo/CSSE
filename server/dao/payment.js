@@ -1,36 +1,28 @@
-const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('report', {
+  return sequelize.define('payment', {
     id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    name: {
-      type: DataTypes.STRING(100),
+    amount: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    description: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    reportTypeId: {
+    paymentMethodId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'reporttype',
+        model: 'paymentmethod',
         key: 'id'
       }
-    },
-    createdDate: {
-      type: DataTypes.INTEGER,
-      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'report',
-    timestamps: false,
+    tableName: 'payment',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -41,10 +33,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "report_reportTypeId_idx",
+        name: "payment_paymentMethod_index_fk_idx",
         using: "BTREE",
         fields: [
-          { name: "reportTypeId" },
+          { name: "paymentMethodId" },
         ]
       },
     ]

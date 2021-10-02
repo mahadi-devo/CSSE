@@ -24,15 +24,16 @@ DROP TABLE IF EXISTS `account`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `createdDate` date NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `createdAt` date NOT NULL,
   `creditAmount` varchar(45) NOT NULL DEFAULT '100',
-  `updatedDate` varchar(45) DEFAULT NULL,
+  `updatedAt` date NOT NULL,
   `passengerId` int NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_passenger_index` (`passengerId`),
   CONSTRAINT `account_passenger_index_fk` FOREIGN KEY (`id`) REFERENCES `passengers` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES (3,'2021-10-02','123','2021-10-02',12,'mahadi@gmail.com','123');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,7 +136,7 @@ DROP TABLE IF EXISTS `fine`;
 CREATE TABLE `fine` (
   `id` int NOT NULL AUTO_INCREMENT,
   `amount` int NOT NULL,
-  `createdDate` datetime NOT NULL,
+  `createdAt` date NOT NULL,
   `accountId` int DEFAULT NULL,
   `inspectionId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -163,7 +165,7 @@ DROP TABLE IF EXISTS `inspection`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inspection` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `inspectionDate` varchar(45) NOT NULL,
+  `createdAt` date NOT NULL,
   `description` varchar(45) NOT NULL,
   `journeyId` int NOT NULL,
   `inspectorId` int NOT NULL,
@@ -193,8 +195,8 @@ DROP TABLE IF EXISTS `journey`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `journey` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `startDate` datetime NOT NULL,
-  `endDate` datetime NOT NULL,
+  `createdAt` date NOT NULL,
+  `updatedAt` date NOT NULL,
   `busId` int NOT NULL,
   `routeId` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -227,7 +229,7 @@ CREATE TABLE `passengerhistory` (
   `depatureLong` varchar(45) NOT NULL,
   `destinationLat` varchar(45) NOT NULL,
   `destinationLong` varchar(45) NOT NULL,
-  `createdAt` datetime NOT NULL,
+  `createdAt` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -255,7 +257,7 @@ CREATE TABLE `passengers` (
   `address` varchar(45) DEFAULT NULL,
   `passportNo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,6 +266,7 @@ CREATE TABLE `passengers` (
 
 LOCK TABLES `passengers` WRITE;
 /*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
+INSERT INTO `passengers` VALUES (1,'Mahadi','2000045','dwewr','122323'),(2,'Mahadi','2000045','dwewr','122323'),(3,'Mahadi','2000045','dwewr','122323'),(4,'Mahadi','2000045','dwewr','122323'),(5,'Mahadi','2000045','dwewr','122323'),(6,'Mahadi','2000045','dwewr','122323'),(7,'Mahadi-devo','2000045','dwewr','122323'),(8,'Mahadi-devo','2000045','dwewr','122323'),(9,'Mahadi-devo','2000045','dwewr','122323'),(10,'Mahadi-devo','2000045','dwewr','122323'),(11,'Mahadi-devo','2000045','dwewr','122323'),(12,'Mahadi-devo','2000045','dwewr','122323');
 /*!40000 ALTER TABLE `passengers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,8 +280,8 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `amount` int NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `updatedDate` datetime NOT NULL,
+  `createdAt` date NOT NULL,
+  `updatedAt` date NOT NULL,
   `paymentMethodId` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `payment_paymentMethod_index_fk_idx` (`paymentMethodId`),
@@ -331,7 +334,7 @@ CREATE TABLE `report` (
   `name` varchar(100) NOT NULL,
   `description` varchar(45) NOT NULL,
   `reportTypeId` int NOT NULL,
-  `createdDate` int NOT NULL,
+  `createdAt` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `report_reportTypeId_idx` (`reportTypeId`),
   CONSTRAINT `report_reportTypeId_idx_fk` FOREIGN KEY (`reportTypeId`) REFERENCES `reporttype` (`id`)
@@ -408,8 +411,8 @@ DROP TABLE IF EXISTS `ticket`;
 CREATE TABLE `ticket` (
   `id` int NOT NULL AUTO_INCREMENT,
   `price` int NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `updatedDate` datetime NOT NULL,
+  `createdAt` date NOT NULL,
+  `updatedAt` date NOT NULL,
   `destination` varchar(100) NOT NULL,
   `validityPeriod` varchar(45) NOT NULL,
   `issuedLocation` varchar(100) NOT NULL,
@@ -462,4 +465,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-02 23:43:23
+-- Dump completed on 2021-10-03  2:41:55
