@@ -1,31 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('passengers', {
+  return sequelize.define('bus', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    name: {
-      type: DataTypes.STRING(45),
-      allowNull: false
+    type: {
+      type: DataTypes.ENUM('normal','semi','luxuary'),
+      allowNull: false,
+      defaultValue: "normal"
     },
-    nic: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
-    address: {
+    driverName: {
       type: DataTypes.STRING(45),
-      allowNull: true
+      allowNull: true,
+      defaultValue: "UNKNOWN"
     },
-    passportNo: {
-      type: DataTypes.STRING(45),
-      allowNull: true
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     sequelize,
-    tableName: 'passengers',
+    tableName: 'bus',
     timestamps: false,
     indexes: [
       {

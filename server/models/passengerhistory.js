@@ -1,32 +1,32 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('passengers', {
+  return sequelize.define('passengerhistory', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    name: {
+    depatureLat: {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    nic: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
-    address: {
+    depatureLong: {
       type: DataTypes.STRING(45),
-      allowNull: true
+      allowNull: false
     },
-    passportNo: {
+    destinationLat: {
       type: DataTypes.STRING(45),
-      allowNull: true
+      allowNull: false
+    },
+    destinationLong: {
+      type: DataTypes.STRING(45),
+      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'passengers',
-    timestamps: false,
+    tableName: 'passengerhistory',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
