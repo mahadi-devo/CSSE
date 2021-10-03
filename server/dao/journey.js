@@ -22,11 +22,27 @@ module.exports = function(sequelize, DataTypes) {
         model: 'route',
         key: 'id'
       }
-    }
+    },
+    accountID: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'account',
+        key: 'id'
+      }
+    },
+    startDateTime: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    endDateTime: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: 'journey',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",

@@ -16,6 +16,8 @@ dotenv.config({ path: './backend/config/.env' });
 // Routes
 const account = require('./routes/account.route');
 const ticket = require('./routes/ticket.route');
+const journey = require('./routes/journey.route');
+const passenger = require('./routes/passenger.route');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use(cors());
 // Mount routes
 app.use('/api/v1/account', account);
 app.use('/api/v1/ticket', ticket);
+app.use('/api/v1/journey', journey);
+app.use('/api/v1/passenger', passenger);
 
 app.use(errorHandler);
 
