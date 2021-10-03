@@ -3,6 +3,8 @@ const Journey = require('../models/journey.model');
 const createJourney = async (req, res, next) => {
   try {
     const { busId, routeId } = req.body;
+    console.log("🚀 ~ file: journey.controller.js ~ line 6 ~ createJourney ~ busId, routeId", busId, routeId)
+    
     let journey = new Journey(busId, routeId);
 
     await journey.createJourny();

@@ -17,11 +17,27 @@ module.exports = function(sequelize, DataTypes) {
     },
     destinationLat: {
       type: DataTypes.STRING(45),
-      allowNull: false
+      allowNull: true
     },
     destinationLong: {
       type: DataTypes.STRING(45),
-      allowNull: false
+      allowNull: true
+    },
+    journeyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'journey',
+        key: 'id'
+      }
+    },
+    accountId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'account',
+        key: 'id'
+      }
     }
   }, {
     sequelize,

@@ -1,7 +1,6 @@
 const initModels = require('../dao/init-models');
 const db = require('../config/db');
 const models = initModels(db);
-const Passenger = require('../models/passenger.model');
 
 class Journey {
   constructor(busId, routeId) {
@@ -12,7 +11,7 @@ class Journey {
   }
 
   async isJournyExist(journeyId) {
-    const journey = getJourny(journeyId);
+    const journey = this.getJourny(journeyId);
     return journey ? true : false;
   }
 

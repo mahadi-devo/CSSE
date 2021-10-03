@@ -23,14 +23,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    accountID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'account',
-        key: 'id'
-      }
-    },
     startDateTime: {
       type: DataTypes.DATE,
       allowNull: false
