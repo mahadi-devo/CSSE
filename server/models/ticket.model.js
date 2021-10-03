@@ -73,7 +73,7 @@ class Ticket {
 
   async getAllTicketInfo() {
     try {
-      return await models.account.findAll();
+      return await models.ticket.findAll();
     } catch (e) {
       throw new Error(e);
     }

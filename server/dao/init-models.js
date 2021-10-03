@@ -15,6 +15,8 @@ const _reporttype = require("./reporttype");
 const _route = require("./route");
 const _ticket = require("./ticket");
 const _tickettype = require("./tickettype");
+const _accounttype = require("./accounttype");
+const _employeetype = require("./employeetype");
 
 function initModels(sequelize) {
   const account = _account(sequelize, DataTypes);
@@ -33,6 +35,8 @@ function initModels(sequelize) {
   const route = _route(sequelize, DataTypes);
   const ticket = _ticket(sequelize, DataTypes);
   const tickettype = _tickettype(sequelize, DataTypes);
+  const accounttype = _accounttype(sequelize, DataTypes);
+  const employeetype = _employeetype(sequelize, DataTypes);
 
   fine.belongsTo(account, { as: "account", foreignKey: "accountId"});
   account.hasMany(fine, { as: "fines", foreignKey: "accountId"});
@@ -40,6 +44,8 @@ function initModels(sequelize) {
   bus.hasMany(journey, { as: "journeys", foreignKey: "busId"});
   inspection.belongsTo(employee, { as: "inspector", foreignKey: "inspectorId"});
   employee.hasMany(inspection, { as: "inspections", foreignKey: "inspectorId"});
+  employee.belongsTo(employeetype, { as: "employeeType", foreignKey: "employeeTypeId"});
+  employeetype.hasMany(employee, { as: "employees", foreignKey: "employeeTypeId"});
   fine.belongsTo(inspection, { as: "inspection", foreignKey: "inspectionId"});
   inspection.hasMany(fine, { as: "fines", foreignKey: "inspectionId"});
   fare.belongsTo(journey, { as: "journey", foreignKey: "journeyId"});
@@ -50,8 +56,14 @@ function initModels(sequelize) {
   passengerhistory.hasMany(fare, { as: "fares", foreignKey: "passengerHistoryId"});
   account.belongsTo(passengers, { as: "id_passenger", foreignKey: "id"});
   passengers.hasOne(account, { as: "account", foreignKey: "id"});
+  account.belongsTo(accounttype, { as: "accountType", foreignKey: "accountTypeId"});
+  accounttype.hasMany(account, { as: "accounts", foreignKey: "accountTypeId"});
+  account.belongsTo(employee, { as: "employee", foreignKey: "employeeId"});
+  employee.hasMany(account, { as: "accounts", foreignKey: "employeeId"});
   payment.belongsTo(paymentmethod, { as: "paymentMethod", foreignKey: "paymentMethodId"});
   paymentmethod.hasMany(payment, { as: "payments", foreignKey: "paymentMethodId"});
+  payment.belongsTo(account, { as: "account", foreignKey: "accountId"});
+  account.hasMany(payment, { as: "payments", foreignKey: "accountId"});
   report.belongsTo(reporttype, { as: "reportType", foreignKey: "reportTypeId"});
   reporttype.hasMany(report, { as: "reports", foreignKey: "reportTypeId"});
   journey.belongsTo(route, { as: "route", foreignKey: "routeId"});

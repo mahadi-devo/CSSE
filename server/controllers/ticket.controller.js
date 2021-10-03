@@ -2,9 +2,6 @@ const Ticket = require("../models/ticket.model");
 
 const createTicket = async (req, res, next) => {
   try {
-    const {
-
-    } = req.body;
     let ticket = new Ticket();
     ticket = ticket.createTicket(
         req.body.price,

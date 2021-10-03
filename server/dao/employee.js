@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('employee', {
     id: {
@@ -10,18 +11,22 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    userName: {
-      type: DataTypes.STRING(45),
-      allowNull: false
+    employeeTypeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'employeetype',
+        key: 'id'
+      }
     },
-    password: {
+    age: {
       type: DataTypes.STRING(45),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
     tableName: 'employee',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -29,6 +34,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "employee_employeeTypeId_index_fx_idx",
+        using: "BTREE",
+        fields: [
+          { name: "employeeTypeId" },
         ]
       },
     ]

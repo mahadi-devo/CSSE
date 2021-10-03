@@ -1,4 +1,4 @@
-
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('payment', {
     id: {
@@ -14,8 +14,17 @@ module.exports = function(sequelize, DataTypes) {
     paymentMethodId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 1,
       references: {
         model: 'paymentmethod',
+        key: 'id'
+      }
+    },
+    accountId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'account',
         key: 'id'
       }
     }
@@ -37,6 +46,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "paymentMethodId" },
+        ]
+      },
+      {
+        name: "payment_accountId_index",
+        using: "BTREE",
+        fields: [
+          { name: "accountId" },
         ]
       },
     ]

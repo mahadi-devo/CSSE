@@ -1,9 +1,10 @@
 const initModels = require("../dao/init-models");
 const db = require("../config/db");
+const Account_Type = require("../common/enum/accountTypes");
 const models = initModels(db);
 const Passenger = require("../models/passenger.model");
 const QRCode = require("qrcode");
-const ApiError = require("../utils/apiError");
+const bcrypt = require("bcryptjs");
 
 class Account {
   constructor() {}
@@ -37,6 +38,7 @@ class Account {
             { transaction: t }
           );
           passengerObj.dataValues.email = account.email;
+          passengerObj.dataValues.accountId = account.id;
           passengerObj.dataValues.creditAmount = account.creditAmount;
           return { account, passengerObj };
         })
@@ -59,7 +61,7 @@ class Account {
     }
   }
 
-  async addCredit(amount, accountId) {
+  async addCredit(amount, accountId, paymentMethodId) {
     try {
       const account = await models.account.findOne({
         where: { id: accountId },
@@ -70,6 +72,10 @@ class Account {
       }
 
       await db.transaction(async (t) => {
+        await models.payment.create({
+          paymentMethodId,
+          accountId: account.id
+        }, { transaction: t })
         await models.account.update(
           {
             creditAmount: (Number(account.creditAmount) + amount).toString(),
@@ -99,13 +105,49 @@ class Account {
 
   async getAllAccountInfo() {
     try {
-      return models.account.findAll({
+      return await models.account.findAll({
         attributes: ["id", "creditAmount", "email", "qrCode"],
         include: {
           model: models.passengers,
           as: "id_passenger",
         },
+        where: { accountTypeId: Account_Type.Passenger }
       });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async accountLogin(email, password) {
+    try {
+      const account = await models.account.findOne({
+        where: { email },
+      });
+
+      if (!account) {
+        throw new Error("No account exist");
+      }
+
+      if (!(await bcrypt.compare(password, account.password))) {
+        throw new Error("Password does not match with the email");
+      }
+
+      const options = {
+        attributes: ["id", "creditAmount", "email", "qrCode", "accountTypeId"],
+        include: {
+          model: models.passengers,
+          as: "id_passenger",
+        },
+        where: { id: account.id },
+      }
+
+      if (account.accountTypeId === Account_Type.Employee) {
+        options.include = {
+          model: models.employee,
+          as: "employee",
+        }
+      }
+      return await models.account.findOne(options);
     } catch (e) {
       throw new Error(e);
     }

@@ -60,9 +60,23 @@ const getAllAccountInfo = async (req, res, next) => {
   }
 }
 
+const accountLogin = async (req, res, next) => {
+  try {
+    const account = new Account();
+    const data = await account.accountLogin(req.body.email, req.body.password);
+    res.status(200).json({
+      data,
+      success: true,
+    })
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 module.exports = {
   createAccount,
   createPayment,
   getAccountInfo,
   getAllAccountInfo,
+  accountLogin,
 };

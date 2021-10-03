@@ -1,17 +1,13 @@
 const Sequelize = require("sequelize");
+const env = require("dotenv");
 
-const database = new Sequelize(
-  "ticketingsystem",
-  "root",
-  "123456",
-  {
-    host: "localhost",
-    dialect: "mysql",
-    define: {
-      timestamps: true,
-    },
-  }
-);
+const database = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: "mysql",
+  define: {
+    timestamps: true,
+  },
+});
 
 database.sync();
 
