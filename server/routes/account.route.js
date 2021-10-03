@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createAccount, createPayment, getAccountInfo, getAllAccountInfo } = require("../controllers/account.controller");
+const { createAccount, createPayment, getAccountInfo, getAllAccountInfo, accountLogin } = require("../controllers/account.controller");
 const validationMiddleware = require("../middleware/validation.middleware");
 const { roleAuthorization } = require("../middleware/auth.middleware");
 const { authorize } = require("../middleware/auth.middleware");

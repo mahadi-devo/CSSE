@@ -8,6 +8,6 @@ const { authorize } = require("../middleware/auth.middleware");
 router.post("/", createTicket);
 router.get("/", getAllTicketInfo);
 router.get("/:id", getTicketInfo);
-router.get("/valid-ticket", checkTicketValidity);
+router.post("/valid-ticket", checkTicketValidity);
 
 module.exports = router;
