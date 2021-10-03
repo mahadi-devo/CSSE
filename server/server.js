@@ -14,10 +14,8 @@ dotenv.config({ path: './backend/config/.env' });
 // sqlConnect();
 
 // Routes
-// const auth = require('./routes/auth.route');
 const account = require('./routes/account.route');
-// const user = require('./routes/user.route');
-// const department = require('./routes/department.route');
+const ticket = require('./routes/ticket.route');
 
 const app = express();
 
@@ -28,11 +26,8 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cors());
 
 // Mount routes
-// app.use('/api/v1/auth', auth);
 app.use('/api/v1/account', account);
-// app.use('/api/v1/ticket', ticket);
-// app.use('/api/v1/department', department);
-// app.use('/api/v1/user', user);
+app.use('/api/v1/ticket', ticket);
 
 app.use(errorHandler);
 

@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { createAccount, createPayment, getAccountInfo, getAllAccountInfo } = require("../controllers/account.controller");
+const { createTicket, getTicketInfo, getAllTicketInfo, checkTicketValidity } = require("../controllers/ticket.controller");
 const validationMiddleware = require("../middleware/validation.middleware");
 const { roleAuthorization } = require("../middleware/auth.middleware");
 const { authorize } = require("../middleware/auth.middleware");
 
-router.post("/", createAccount);
-router.get("/", getAllAccountInfo);
-router.patch("/payment", createPayment);
-router.get("/:id", getAccountInfo);
+router.post("/", createTicket);
+router.get("/", getAllTicketInfo);
+router.get("/:id", getTicketInfo);
+router.get("/valid-ticket", checkTicketValidity);
 
 module.exports = router;
