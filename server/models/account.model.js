@@ -109,7 +109,7 @@ class Account {
         attributes: ["id", "creditAmount", "email", "qrCode"],
         include: {
           model: models.passengers,
-          as: "id_passenger",
+          as: "passenger",
         },
         where: { accountTypeId: Account_Type.Passenger }
       });
