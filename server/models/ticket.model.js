@@ -107,9 +107,11 @@ class Ticket {
         );
 
         if (currentDistance > actualDistance) {
+          const dif = currentDistance - actualDistance
           return {
             status: Ticket_Status.Invalid,
             distance: convertDistance(currentDistance, "m"),
+            fine:  Math.trunc(dif * process.env.FINE_AMOUNT_PER_METER),
           };
         } else {
           return {
@@ -125,8 +127,10 @@ class Ticket {
         const validDateTime = Date.parse(ticket.validityPeriod);
 
         if (currentDateTime.getTime() > validDateTime) {
+          const dif = currentDateTime.getTime() - validDateTime;
           return {
             status: Ticket_Status.Invalid,
+            fine: Math.trunc(Math.floor((dif / (1000 * 60 * 60)) % 24) * process.env.FINE_AMOUNT_PER_HOUR),
           };
         } else {
           return {

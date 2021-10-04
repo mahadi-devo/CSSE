@@ -1,14 +1,11 @@
+const bcrypt = require('bcryptjs');
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('account', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
-            references: {
-                model: 'passengers',
-                key: 'id'
-            }
+      primaryKey: true
         },
         creditAmount: {
             type: DataTypes.FLOAT,
@@ -17,7 +14,11 @@ module.exports = function(sequelize, DataTypes) {
         },
         passengerId: {
             type: DataTypes.INTEGER,
-            allowNull: true
+      allowNull: true,
+      references: {
+        model: 'passengers',
+        key: 'id'
+      }
         },
         email: {
             type: DataTypes.STRING(100),

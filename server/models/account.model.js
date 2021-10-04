@@ -94,7 +94,7 @@ class Account {
         attributes: ["id", "creditAmount", "email", "qrCode"],
         include: {
           model: models.passengers,
-          as: "id_passenger",
+          as: "passenger",
         },
         where: { id: accountId },
       });
@@ -109,7 +109,7 @@ class Account {
         attributes: ["id", "creditAmount", "email", "qrCode"],
         include: {
           model: models.passengers,
-          as: "id_passenger",
+          as: "passenger",
         },
         where: { accountTypeId: Account_Type.Passenger }
       });
@@ -136,7 +136,8 @@ class Account {
         attributes: ["id", "creditAmount", "email", "qrCode", "accountTypeId"],
         include: {
           model: models.passengers,
-          as: "id_passenger",
+          as: "passenger",
+          where: { id: account.passengerId }
         },
         where: { id: account.id },
       }
@@ -145,6 +146,7 @@ class Account {
         options.include = {
           model: models.employee,
           as: "employee",
+          where: { id: account.employeeId }
         }
       }
       return await models.account.findOne(options);

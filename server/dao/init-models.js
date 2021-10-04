@@ -54,8 +54,8 @@ function initModels(sequelize) {
   journey.hasMany(inspection, { as: "inspections", foreignKey: "journeyId"});
   fare.belongsTo(passengerhistory, { as: "passengerHistory", foreignKey: "passengerHistoryId"});
   passengerhistory.hasMany(fare, { as: "fares", foreignKey: "passengerHistoryId"});
-  account.belongsTo(passengers, { as: "id_passenger", foreignKey: "id"});
-  passengers.hasOne(account, { as: "account", foreignKey: "id"});
+  account.belongsTo(passengers, { as: "passenger", foreignKey: "passengerId"});
+  passengers.hasMany(account, { as: "accounts", foreignKey: "passengerId"});
   account.belongsTo(accounttype, { as: "accountType", foreignKey: "accountTypeId"});
   accounttype.hasMany(account, { as: "accounts", foreignKey: "accountTypeId"});
   account.belongsTo(employee, { as: "employee", foreignKey: "employeeId"});
