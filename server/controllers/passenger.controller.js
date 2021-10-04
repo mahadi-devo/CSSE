@@ -1,16 +1,15 @@
 const PassengerJourney = require('../models/passengerJourney.model');
 
-const passengerJourneyStart = async (req, res, next) => {
+const passengerJourney = async (req, res, next) => {
   try {
     const { accountId, journeyId, depatureLat, depatureLong } = req.body;
     const passengerJourney = new PassengerJourney(accountId, journeyId);
+    console.log("🚀 ~ file: passenger.controller.js ~ line 7 ~ passengerJourney ~ passengerJourney", passengerJourney)
     const val = await passengerJourney.findPassengerJourney();
-    console.log("🚀 ~ file: passenger.controller.js ~ line 8 ~ passengerJourneyStart ~ val", val)
-    if (!passengerJourney.id) {
-      console.log("🚀 ~ file: passenger.controller.js ~ line 9 ~ if", passengerJourney.findPassengerJourney())
+    if (!val) {
       passengerJourney.startJurney(depatureLat, depatureLong);
     } else {
-      console.log("🚀 ~ file: passenger.controller.js ~ line 9 ~ else", passengerJourney.findPassengerJourney())
+      passengerJourney.endJurney(depatureLat, depatureLong);
     }
     res.status(200).json({
       success: true,
@@ -20,11 +19,31 @@ const passengerJourneyStart = async (req, res, next) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      data: {...req.body},
+      data: { ...req.body },
     });
   }
 };
 
-const passengerJourneyEnd = async (req, res, next) => {};
+const passengerJourneyHistory = async (req, res, next) => {
+  try {
+    const { accountId } = req.params;
+    const passengerJourney = new PassengerJourney(accountId, null);
+    const val = await passengerJourney.findPassengerJourney();
+    let data;
+    if (val) {
+      data = await passengerJourney.passengerJourneyHistory();
+    }
+    res.status(200).json({
+      success: true,
+      data: data,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      data: { ...req.body },
+    });
+  }
+};
 
-module.exports = { passengerJourneyStart, passengerJourneyEnd };
+module.exports = { passengerJourney, passengerJourneyHistory };

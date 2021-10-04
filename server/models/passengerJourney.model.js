@@ -12,10 +12,14 @@ class PassengerJourney {
     this.depatureLong = null;
     this.destinationLat = null;
     this.destinationLong = null;
-    this.createAt = null;
+    this.createdAt = null;
   }
 
   async findPassengerJourney() {
+    let whereQuary = {};
+    if (this.accountId) whereQuary.accountId = this.accountId;
+    if (this.journeyId) whereQuary.journeyId = this.journeyId;
+    console.log("🚀 ~ file: passengerJourney.model.js ~ line 20 ~ PassengerJourney ~ findPassengerJourney ~ whereQuary", whereQuary)
     try {
       const passengerJourney = await models.passengerhistory.findOne({
         attributes: [
@@ -24,18 +28,23 @@ class PassengerJourney {
           'depatureLong',
           'destinationLat',
           'destinationLong',
+          'createdAt',
+          'updatedAt',
         ],
-        where: { accountId: this.accountId, journeyId: this.journeyId },
+        where: whereQuary,
       });
-      console.log("🚀 ~ file: passengerJourney.model.js ~ line 30 ~ PassengerJourney ~ findPassengerJourney ~ passengerJourney", passengerJourney)
 
       if (passengerJourney) {
+        this.id = passengerJourney.id;
+        this.createdAt = passengerJourney.dataValues.createdAt;
+        this.updatedAt = passengerJourney.dataValues.updatedAt;
         this.depatureLat = passengerJourney.depatureLat;
         this.depatureLong = passengerJourney.depatureLong;
         this.destinationLat = passengerJourney.destinationLat;
         this.destinationLong = passengerJourney.destinationLong;
+        return true;
       } else {
-      console.log("🚀 ~ file: false", passengerJourney)
+        return false;
       }
     } catch (e) {
       throw new Error(e);
@@ -51,25 +60,26 @@ class PassengerJourney {
         {
           depatureLat: this.depatureLat,
           depatureLong: this.depatureLong,
-          accountId: 35,
-          journeyId: 2,
+          accountId: this.accountId,
+          journeyId: this.journeyId,
         },
         { transaction: t }
       );
-
-      this.createAt = passengerJourney.dataValues.createAt;
+      this.id = passengerJourney.id;
+      this.createdAt = passengerJourney.dataValues.createdAt;
+      this.updatedAt = passengerJourney.dataValues.updatedAt;
     });
   }
 
-  async endJurney(destinatLat, destinatLong) {
-    this.destinationLat = destinatLat;
-    this.destinationLong = destinatLong;
+  async endJurney(destinationLat, destinationLong) {
+    this.destinationLat = destinationLat;
+    this.destinationLong = destinationLong;
 
     await db.transaction(async (t) => {
       await models.passengerhistory.update(
         {
-          destinatLat,
-          destinatLong,
+          destinationLat,
+          destinationLong,
         },
         {
           where: {
@@ -86,20 +96,45 @@ class PassengerJourney {
         transaction: t,
       });
 
-      const newCreditAmount = account.creditAmount - getTicketPrice();
+      const newCreditAmount =
+        (await account.creditAmount) - this.getTicketPrice();
 
       await models.passengerhistory.update(
         {
-          creditAmount: newCreditAmount 
+          creditAmount: newCreditAmount,
         },
         {
           where: {
-            id: this.accountId
+            id: this.accountId,
           },
           transaction: t,
         }
       );
     });
+  }
+
+  async passengerJourneyHistory() {
+    console.log("🚀 ~ file: passengerJourney.model.js ~ line 117 ~ PassengerJourney ~ passengerJourneyHistory ~ passengerJourneyHistory")
+    try {
+      return await models.passengerhistory.findAll({
+        attributes: [
+          'id',
+          'depatureLat',
+          'depatureLong',
+          'destinationLat',
+          'destinationLong',
+          'createdAt',
+          'updatedAt',
+        ],
+        include: {
+          model: models.journey,
+          as: "journey",
+        },
+        where: { accountId: 35 }
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   async getTicketPrice() {

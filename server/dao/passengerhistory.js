@@ -1,4 +1,4 @@
-
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('passengerhistory', {
     id: {
@@ -23,19 +23,19 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true
     },
-    journeyId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'journey',
-        key: 'id'
-      }
-    },
     accountId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'account',
+        key: 'id'
+      }
+    },
+    journeyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'journey',
         key: 'id'
       }
     }
@@ -50,6 +50,20 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "passengerhistory_fk_accountid_idx",
+        using: "BTREE",
+        fields: [
+          { name: "accountId" },
+        ]
+      },
+      {
+        name: "passengerhistory_fk_journeyid_idx",
+        using: "BTREE",
+        fields: [
+          { name: "journeyId" },
         ]
       },
     ]

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { passengerJourneyStart, passengerJourneyEnd } = require("../controllers/passenger.controller");
+const { passengerJourney, passengerJourneyHistory } = require("../controllers/passenger.controller");
 
-router.post("/start", passengerJourneyStart);
-router.post("/end", passengerJourneyEnd);
+router.post("/journey", passengerJourney);
+router.get("/journeyHistory/:accountId", passengerJourneyHistory);
 
 module.exports = router;
