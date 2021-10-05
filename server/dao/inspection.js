@@ -11,10 +11,11 @@ module.exports = function (sequelize, DataTypes) {
       description: {
         type: DataTypes.STRING(45),
         allowNull: false,
+        defaultValue: 'Normal Inspection'
       },
       journeyId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "journey",
           key: "id",
@@ -27,6 +28,14 @@ module.exports = function (sequelize, DataTypes) {
           model: "employee",
           key: "id",
         },
+      },
+      inspectionLat: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      inspectionLong: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
       },
     },
     {

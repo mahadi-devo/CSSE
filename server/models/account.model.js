@@ -2,9 +2,12 @@ const initModels = require("../dao/init-models");
 const db = require("../config/db");
 const Account_Type = require("../common/enum/accountTypes");
 const models = initModels(db);
-const Passenger = require("../models/passenger.model");
+const Passenger = require("./passenger.model");
 const QRCode = require("qrcode");
 const bcrypt = require("bcryptjs");
+const Status = require("../common/enum/ticketStatus");
+const Fine = require("./fine.model");
+const Inspection = require("./inspection.models");
 
 class Account {
   constructor() {}
@@ -150,6 +153,66 @@ class Account {
         }
       }
       return await models.account.findOne(options);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async checkAccountValidity(passengerId, inspectorId, ticketId, currentLat = null, currentLong = null) {
+    try {
+      const passenger = await models.account.findOne({
+        where: {id: passengerId},
+      });
+
+      const inspector = await models.account.findOne({
+        where: {id: inspectorId},
+      });
+
+      if (!passenger) {
+        throw new Error("No Passenger Account Exist");
+      }
+
+      if (!inspector) {
+        throw new Error("No Inspector Account Exist");
+      }
+
+      const passengerHistory = models.passengerhistory.findOne({
+        where: {id: passenger.id}
+      })
+
+      const fine = new Fine(inspector.id, passenger);
+      const inspection = new Inspection(inspector.id, currentLat, currentLong, passenger.journeyId)
+      const fineAmount = await fine.calculateFineByDistanceForPassenger(passengerHistory, currentLat, currentLong);
+
+      await db.transaction(async (t) => {
+        await inspection.createInspection(t);
+        await fine.createFine(fineAmount, t)
+        await models.account.update(
+            {
+              creditAmount: (fine - Number(passenger.creditAmount)).toString(),
+            },
+            { where: { id: passenger.id }, transaction: t }
+        );
+        await models.passengerhistory.update(
+            {
+              fineId: fine.id,
+            },
+            { where: { accountId: passenger.id }, transaction: t }
+        );
+      });
+
+      if (fineAmount) {
+        return {
+          status: Status.Invalid,
+          fine: fineAmount
+        };
+      } else {
+        return {
+          status: Status.Valid,
+          fine: null
+        };
+      }
+
     } catch (e) {
       throw new Error(e);
     }

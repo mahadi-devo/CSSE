@@ -28,11 +28,7 @@ const passengerJourneyHistory = async (req, res, next) => {
   try {
     const { accountId } = req.params;
     const passengerJourney = new PassengerJourney(accountId, null);
-    const val = await passengerJourney.findPassengerJourney();
-    let data;
-    if (val) {
-      data = await passengerJourney.passengerJourneyHistory();
-    }
+    const data = await passengerJourney.getPassengerJourney();
     res.status(200).json({
       success: true,
       data: data,
@@ -46,4 +42,21 @@ const passengerJourneyHistory = async (req, res, next) => {
   }
 };
 
-module.exports = { passengerJourney, passengerJourneyHistory };
+const getAllPassengerJourneyHistory = async (req, res, next) => {
+  try {
+    const passengerJourney = new PassengerJourney();
+    const data = await passengerJourney.getAllPassengerJourney();
+    res.status(200).json({
+      success: true,
+      data: data,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      data: { ...req.body },
+    });
+  }
+};
+
+module.exports = { passengerJourney, passengerJourneyHistory, getAllPassengerJourneyHistory };

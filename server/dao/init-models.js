@@ -72,6 +72,12 @@ function initModels(sequelize) {
   tickettype.hasMany(ticket, { as: "tickets", foreignKey: "tickettypeId"});
   passengerhistory.belongsTo(journey, { as: "journey", foreignKey: "journeyId"});
   journey.hasMany(passengerhistory, { as: "passengerhistories", foreignKey: "journeyId"});
+  fine.hasMany(passengerhistory, { as: "passengerhistories", foreignKey: "fineId"});
+  fine.belongsTo(inspection, { as: "inspection", foreignKey: "inspectionId"});
+  fare.belongsTo(journey, { as: "journey", foreignKey: "journeyId"});
+  journey.hasMany(fare, { as: "fares", foreignKey: "journeyId"});
+  passengerhistory.belongsTo(account, { as: "account", foreignKey: "accountId"});
+  account.hasMany(passengerhistory, { as: "passengerhistories", foreignKey: "accountId"});
 
   return {
     account,

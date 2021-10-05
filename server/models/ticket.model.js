@@ -4,7 +4,9 @@ const models = initModels(db);
 const TicketType = require("../common/enum/ticketTypes");
 const Ticket_Status = require("../common/enum/ticketStatus");
 const QRCode = require("qrcode");
-const { getDistance, convertDistance } = require("geolib");
+const { convertDistance } = require("geolib");
+const Fine = require("./fine.model");
+const Inspection = require("./inspection.models");
 
 class Ticket {
   constructor() {}
@@ -27,8 +29,6 @@ class Ticket {
       date.setDate(date.getDate() + 30);
       validityPeriod = new Date(date).toISOString();
     }
-    // destinationLat = 6.672834;
-    // destinationLong = 80.396576;
 
     try {
       await db
@@ -79,65 +79,57 @@ class Ticket {
     }
   }
 
-  async checkTicketValidity(ticketId, currentLat = null, currentLong = null) {
+  async checkTicketValidity(inspectorId, ticketId, currentLat = null, currentLong = null) {
     try {
       const ticket = await models.ticket.findOne({
-        where: { id: ticketId },
+        where: {id: ticketId},
       });
 
       if (!ticket) {
         throw new Error("No ticket exist");
       }
-
+      let ticketStatus;
+      const fine = new Fine();
       if (ticket.ticketTypeId === TicketType.One_Way_Ticket) {
-        const actualDistance = getDistance(
-          {
-            latitude: ticket.issuedLocationLat,
-            longitude: ticket.issuedLocationLong,
-          },
-          { latitude: ticket.destinationLat, longitude: ticket.destinationLong }
-        );
 
-        const currentDistance = getDistance(
-          {
-            latitude: ticket.issuedLocationLat,
-            longitude: ticket.issuedLocationLong,
-          },
-          { latitude: currentLat, longitude: currentLong }
-        );
+        const {fineValue, currentDistance} = fine.calculateFineByDistanceForTicket(ticket, currentLat, currentLong);
 
-        if (currentDistance > actualDistance) {
-          const dif = currentDistance - actualDistance
-          return {
+        if (fineValue)
+          ticketStatus = {
             status: Ticket_Status.Invalid,
             distance: convertDistance(currentDistance, "m"),
-            fine:  Math.trunc(dif * process.env.FINE_AMOUNT_PER_METER),
-          };
-        } else {
-          return {
-            status: Ticket_Status.Valid,
-            distance: convertDistance(currentDistance, "m"),
-          };
+            fine: fineValue,
+          } else {
+            ticketStatus = {
+              status: Ticket_Status.Valid,
+              distance: convertDistance(currentDistance, "m"),
+            }
         }
       } else if (
         ticket.ticketTypeId === TicketType.Day_Use_Ticket ||
         ticket.ticketTypeId === TicketType.Pay_As_You_Go_Ticket
       ) {
-        const currentDateTime = new Date();
-        const validDateTime = Date.parse(ticket.validityPeriod);
+        const fineValue = fine.calculateFineByTime(ticket.validityPeriod);
 
-        if (currentDateTime.getTime() > validDateTime) {
-          const dif = currentDateTime.getTime() - validDateTime;
-          return {
+        if (fineValue) {
+          ticketStatus = {
             status: Ticket_Status.Invalid,
-            fine: Math.trunc(Math.floor((dif / (1000 * 60 * 60)) % 24) * process.env.FINE_AMOUNT_PER_HOUR),
+            fine: fineValue,
           };
         } else {
-          return {
+          ticketStatus = {
             status: Ticket_Status.Valid,
           };
         }
       }
+
+      const inspection = new Inspection(inspectorId, currentLat, currentLong)
+      await db.transaction(async (t) => {
+        await inspection.createInspection(t)
+        await  fine.createFine(ticketStatus.fine,t)
+      });
+
+      return ticketStatus;
     } catch (e) {
       throw new Error(e);
     }
