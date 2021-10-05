@@ -28,29 +28,6 @@ const ScanTicket = ({ navigation }) => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    const ticketdata = {
-      id: 5,
-      price: '100',
-      destinationLong: '79.8752768',
-      destinationLat: '7.2351744',
-      issuedLocationLat: '7.227817612991054',
-      issuedLocationLong: '79.89985870079776',
-      ticketTypeId: '1',
-      validityPeriod: '2021-11-02T17:47:00.281Z',
-      updatedAt: '2021-10-03T17:47:00.287Z',
-      createdAt: '2021-10-03T17:47:00.287Z',
-    };
-
-    const userData = {
-      id: 49,
-      name: 'pasindu',
-      nic: '971422323V',
-      address: 'ja-ela, Makewita',
-      passportNo: '12121212',
-      email: 'pasinduj9@gmail.com',
-      accountId: 37,
-      creditAmount: '100',
-    };
     navigation.navigate('Validity Screen', JSON.parse(data));
   };
 
