@@ -27,6 +27,7 @@ const ValidityScreenUser = ({ route, navigation }) => {
   const [validity, setValidity] = useState('');
   const [location, setLocation] = useState(null);
   const [account, setAccount] = useState('');
+  const [fine, setFine] = useState('');
 
   const config = {
     headers: {
@@ -64,11 +65,12 @@ const ValidityScreenUser = ({ route, navigation }) => {
     };
 
     const res = await axios.post(
-      'http://localhost/api/v1/ticket/valid-ticket',
+      'http://localhost/api/v1/ticket/valid-account',
       data,
       config
     );
     setValidity(res.data.data.status);
+    setFine(res.data.data.fine)
   };
 
   const getLocation = async () => {
@@ -133,7 +135,7 @@ const ValidityScreenUser = ({ route, navigation }) => {
 
         <Text fontSize='lg'>Fine:</Text>
         <Text fontSize='lg' mb='3'>
-          0
+          {fine}
         </Text>
       </Box>
     </VStack>

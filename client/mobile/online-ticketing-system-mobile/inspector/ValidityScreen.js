@@ -37,6 +37,7 @@ const ValidityScreen = ({ route, navigation }) => {
   const [destination, setDestination] = useState('');
   const [startLocation, setStartLocation] = useState('');
   const [account, setAccount] = useState('');
+  const [fine, setFine] = useState('');
 
   const config = {
     headers: {
@@ -92,6 +93,7 @@ const ValidityScreen = ({ route, navigation }) => {
       config
     );
     setValidity(res.data.data.status);
+    setFine(res.data.data.fine)
   };
 
   const getLocation = async () => {
@@ -168,6 +170,10 @@ const ValidityScreen = ({ route, navigation }) => {
         <Text fontSize='lg'>Valid Till:</Text>
         <Text fontSize='lg' mb='3'>
           {validityPeriod.split('T')[0]}
+        </Text>
+        <Text fontSize='lg'>Fine:</Text>
+        <Text fontSize='lg' mb='3'>
+          {fine}
         </Text>
       </Box>
     </VStack>
