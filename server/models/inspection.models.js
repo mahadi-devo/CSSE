@@ -79,6 +79,60 @@ class Inspection {
             throw new Error(e);
         }
     }
+
+    async getInspectionDetails(id) {
+        try {
+            const inspection = await models.inspection.findAll({
+                include : [
+                    {
+                        model: models.employee,
+                        as: 'employee'
+                    },
+                    {
+                        models: models.journey,
+                        as: 'journey',
+                        include: {
+                            model: models.passengerhistory,
+                            as: 'passengerhistories',
+                            include: {
+                                model: models.account,
+                                as: 'account',
+                                include: {
+                                    model: models.passengers,
+                                    as: 'passenger',
+                                }
+                            }
+                        }
+                    }
+                ],
+                where: { id }
+            })
+
+            const header = ['Passenger Id','Passenger Name', 'Inspect Location', 'Inspector Name', 'Date Time', 'Fine Amount']
+            let body = []
+            inspection.forEach(inspect => {
+                const detailsObj = {}
+                detailsObj.InspectLocation = inspect.inspectionLocation;
+                detailsObj.Date = inspect.createdAt;
+                inspect.employee.forEach(employee => {
+                    detailsObj.InspectorName = employee.name;
+                })
+                inspect.journey.passengerhistories.forEach(passenger => {
+                    detailsObj.passengerId = passenger.id;
+                    detailsObj.passengerName = passenger.name;
+                    detailsObj.fineAmount = passenger.fine;
+                })
+                body.push(detailsObj);
+            })
+            const report = new REPORT(REPORTS.INSPECTION_DETAILS.title, REPORTS.INSPECTION_DETAILS.description, REPORTS.INSPECTION_DETAILS.type);
+            const inspectionDetailsReport = await report.createReport(header, body);
+
+            return { inspection, inspectionDetailsReport}
+
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
 }
 
 module.exports = Inspection;

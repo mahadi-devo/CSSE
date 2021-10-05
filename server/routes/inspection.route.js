@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { createAccount } = require("../controllers/account.controller");
+const { getAllInspectionDetails, getInspectionDetails } = require("../controllers/inspection.controller");
 const validationMiddleware = require("../middleware/validation.middleware");
 
 router.post("/", getAllInspectionDetails);
+router.post("/:accountId", getInspectionDetails);
 
 module.exports = router;
