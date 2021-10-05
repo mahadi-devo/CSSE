@@ -35,7 +35,7 @@ const TopUpAccount = ({ navigation }) => {
   const onSubmit = async () => {
     try {
       const res = await axios.post(
-        'https://3747-112-134-227-57.ngrok.io/api/v1/account/payment',
+        'https://localhost/api/v1/account/payment',
         data,
         config
       );
