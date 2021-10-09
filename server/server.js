@@ -10,6 +10,7 @@ const ticket = require('./routes/ticket.route');
 const journey = require('./routes/journey.route');
 const passenger = require('./routes/passenger.route');
 const auth = require("./routes/auth.route");
+const inspection = require("./routes/inspection.route");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/v1/ticket', ticket);
 app.use('/api/v1/journey', journey);
 app.use('/api/v1/passenger', passenger);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/inspection", inspection);
 
 app.use(errorHandler);
 

@@ -1,4 +1,4 @@
-
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('journey', {
     id: {
@@ -22,19 +22,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'route',
         key: 'id'
       }
-    },
-    startDateTime: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    endDateTime: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
+    }
   }, {
     sequelize,
     tableName: 'journey',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

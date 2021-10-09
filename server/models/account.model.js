@@ -77,7 +77,8 @@ class Account {
       await db.transaction(async (t) => {
         await models.payment.create({
           paymentMethodId,
-          accountId: account.id
+          accountId: account.id,
+          amount,
         }, { transaction: t })
         await models.account.update(
           {

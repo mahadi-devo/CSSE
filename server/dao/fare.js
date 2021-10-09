@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('fare', {
     id: {
@@ -19,11 +20,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     passengerHistoryId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'passengerhistory',
-        key: 'id'
-      }
+      allowNull: false
     }
   }, {
     sequelize,
@@ -36,13 +33,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-        ]
-      },
-      {
-        name: "fare_passengerHistory_index",
-        using: "BTREE",
-        fields: [
-          { name: "passengerHistoryId" },
         ]
       },
       {

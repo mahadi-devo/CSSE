@@ -39,8 +39,8 @@ CREATE TABLE `account` (
   KEY `account_employeeId_index` (`employeeId`),
   CONSTRAINT `account_accountType_index_fk` FOREIGN KEY (`accountTypeId`) REFERENCES `accounttype` (`id`),
   CONSTRAINT `account_employeeId_index_fk` FOREIGN KEY (`employeeId`) REFERENCES `employee` (`id`),
-  CONSTRAINT `account_passenger_index_fk` FOREIGN KEY (`id`) REFERENCES `passengers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `account_passenger_index_fk` FOREIGN KEY (`passengerId`) REFERENCES `passengers` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (35,'2021-10-03',123,'2021-10-03',45,'mahadihassan083@gmail.com','$2a$10$GrWXBRdWSF4CBQiU/BYkqucUysfHmkDXJA5eX2b4PJ.8YIjg.zm8u','data:image/png;base64,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',NULL,1);
+INSERT INTO `account` VALUES (36,'2021-10-09',250,'2021-10-09',51,'mahadihassan083@gmail.com','$2a$10$JGpyWCb53/mp1ch/yHdo1..rb35np4wrcxOUzumYRsQtGIvnPCetC','data:image/png;base64,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',NULL,1),(37,'2021-10-09',120,'2021-10-09',52,'mahadihassan083@gmail.com','$2a$10$7w5dlhtp2tolRaMPkVMUT.vM3348Hf2QwjgJgwrS4w3MLyvRRu/82','data:image/png;base64,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',NULL,1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `bus` (
   `driverName` varchar(45) DEFAULT 'UNKNOWN',
   `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,10 +170,8 @@ CREATE TABLE `fare` (
   `journeyId` int NOT NULL,
   `passengerHistoryId` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fare_passengerHistory_index` (`passengerHistoryId`),
   KEY `fare_journeyId_index` (`journeyId`),
-  CONSTRAINT `fare_journeyId_index_fk` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`),
-  CONSTRAINT `fare_passengerHistory_index_fk` FOREIGN KEY (`passengerHistoryId`) REFERENCES `passengerhistory` (`id`)
+  CONSTRAINT `fare_journeyId_index_fk` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -226,9 +224,12 @@ DROP TABLE IF EXISTS `inspection`;
 CREATE TABLE `inspection` (
   `id` int NOT NULL AUTO_INCREMENT,
   `createdAt` date NOT NULL,
-  `description` varchar(45) NOT NULL,
-  `journeyId` int NOT NULL,
+  `description` varchar(45) NOT NULL DEFAULT 'Normal Inspection',
+  `journeyId` int DEFAULT NULL,
   `inspectorId` int NOT NULL,
+  `updatedAt` date DEFAULT NULL,
+  `inspectionLat` varchar(100) NOT NULL,
+  `inspectionLong` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `inspection_journeyId_index` (`journeyId`),
   KEY `inspection_inspectorId_index` (`inspectorId`),
@@ -287,10 +288,22 @@ CREATE TABLE `passengerhistory` (
   `id` int NOT NULL AUTO_INCREMENT,
   `depatureLat` varchar(45) NOT NULL,
   `depatureLong` varchar(45) NOT NULL,
-  `destinationLat` varchar(45) NOT NULL,
-  `destinationLong` varchar(45) NOT NULL,
+  `destinationLat` varchar(45) DEFAULT NULL,
+  `destinationLong` varchar(45) DEFAULT NULL,
   `createdAt` date NOT NULL,
-  PRIMARY KEY (`id`)
+  `updatedAt` date DEFAULT NULL,
+  `accountId` int NOT NULL,
+  `journeyId` int NOT NULL,
+  `fineId` int DEFAULT NULL,
+  `fareId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `passengerhistory_fk_accountid_idx` (`accountId`),
+  KEY `passengerhistory_fk_journeyid_idx` (`journeyId`),
+  KEY `passengerhistory_fineId_idx` (`fineId`) /*!80000 INVISIBLE */,
+  KEY `passengerhistory_fareId_index` (`fareId`) USING BTREE,
+  CONSTRAINT `passengerhistory_fineId_idx_fk` FOREIGN KEY (`fineId`) REFERENCES `fine` (`id`),
+  CONSTRAINT `passengerhistory_fk_accountid` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`),
+  CONSTRAINT `passengerhistory_fk_journeyid` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -317,7 +330,7 @@ CREATE TABLE `passengers` (
   `address` varchar(45) DEFAULT NULL,
   `passportNo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +339,7 @@ CREATE TABLE `passengers` (
 
 LOCK TABLES `passengers` WRITE;
 /*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
-INSERT INTO `passengers` VALUES (1,'Mahadi','2000045','dwewr','122323'),(2,'Mahadi','2000045','dwewr','122323'),(3,'Mahadi','2000045','dwewr','122323'),(4,'Mahadi','2000045','dwewr','122323'),(5,'Mahadi','2000045','dwewr','122323'),(6,'Mahadi','2000045','dwewr','122323'),(7,'Mahadi-devo','2000045','dwewr','122323'),(8,'Mahadi-devo','2000045','dwewr','122323'),(9,'Mahadi-devo','2000045','dwewr','122323'),(10,'Mahadi-devo','2000045','dwewr','122323'),(11,'Mahadi-devo','2000045','dwewr','122323'),(12,'Mahadi-devo','2000045','dwewr','122323'),(13,'Mahadi-devo','2000045','dweasdwr','122323'),(14,'Mahadi-devo','2000045','dweasdwr','122323'),(15,'Mahadi-devo','2000045','dweasdwr','122323'),(16,'Mahadi-devo','2000045','dweasdwr','122323'),(17,'Mahadi-devo','2000045','dweasdwr','122323'),(18,'Mahadi-devo','2000045','dweasdwr','122323'),(19,'Mahadi-devo','2000045','dweasdwr','122323'),(20,'Mahadi-devo','2000045','dweasdwr','122323'),(21,'Mahadi-devo','2000045','dweasdwr','122323'),(22,'Mahadi-devo','2000045','dweasdwr','122323'),(23,'Mahadi-devo','2000045','dweasdwr','122323'),(24,'Mahadi-devo','2000045','dweasdwr','122323'),(25,'Mahadi-devo','2000045','dweasdwr','122323'),(26,'Mahadi-devo','2000045','dweasdwr','122323'),(27,'Mahadi-devo','2000045','dweasdwr','122323'),(28,'Mahadi-devo','2000045','dweasdwr','122323'),(29,'Mahadi-devo','2000045','dweasdwr','122323'),(30,'Mahadi-devo','2000045','dweasdwr','122323'),(31,'Mahadi-devo','2000045','dweasdwr','122323'),(32,'Mahadi-devo','2000045','dweasdwr','122323'),(33,'Mahadi-devo','2000045','dweasdwr','122323'),(34,'Mahadi-devo','2000045','dweasdwr','122323'),(35,'Mahadi-devo','2000045','dweasdwr','122323'),(36,'Mahadi-devo','2000045','dweasdwr','122323'),(37,'Mahadi-devo','2000045','dweasdwr','122323'),(38,'Mahadi-devo','2000045','dweasdwr','122323'),(39,'Mahadi-devo','2000045','dweasdwr','122323'),(40,'Mahadi-devo','2000045','dweasdwr','122323'),(41,'Mahadi-devo','2000045','dweasdwr','122323'),(42,'Mahadi-devo','2000045','dweasdwr','122323'),(43,'Mahadi-devo','2000045','dweasdwr','122323'),(44,'Mahadi-devo','2000045','dweasdwr','122323'),(45,'Mahadi-devo','2000045','dweasdwr','122323');
+INSERT INTO `passengers` VALUES (1,'Mahadi','2000045','dwewr','122323'),(2,'Mahadi','2000045','dwewr','122323'),(3,'Mahadi','2000045','dwewr','122323'),(4,'Mahadi','2000045','dwewr','122323'),(5,'Mahadi','2000045','dwewr','122323'),(6,'Mahadi','2000045','dwewr','122323'),(7,'Mahadi-devo','2000045','dwewr','122323'),(8,'Mahadi-devo','2000045','dwewr','122323'),(9,'Mahadi-devo','2000045','dwewr','122323'),(10,'Mahadi-devo','2000045','dwewr','122323'),(11,'Mahadi-devo','2000045','dwewr','122323'),(12,'Mahadi-devo','2000045','dwewr','122323'),(13,'Mahadi-devo','2000045','dweasdwr','122323'),(14,'Mahadi-devo','2000045','dweasdwr','122323'),(15,'Mahadi-devo','2000045','dweasdwr','122323'),(16,'Mahadi-devo','2000045','dweasdwr','122323'),(17,'Mahadi-devo','2000045','dweasdwr','122323'),(18,'Mahadi-devo','2000045','dweasdwr','122323'),(19,'Mahadi-devo','2000045','dweasdwr','122323'),(20,'Mahadi-devo','2000045','dweasdwr','122323'),(21,'Mahadi-devo','2000045','dweasdwr','122323'),(22,'Mahadi-devo','2000045','dweasdwr','122323'),(23,'Mahadi-devo','2000045','dweasdwr','122323'),(24,'Mahadi-devo','2000045','dweasdwr','122323'),(25,'Mahadi-devo','2000045','dweasdwr','122323'),(26,'Mahadi-devo','2000045','dweasdwr','122323'),(27,'Mahadi-devo','2000045','dweasdwr','122323'),(28,'Mahadi-devo','2000045','dweasdwr','122323'),(29,'Mahadi-devo','2000045','dweasdwr','122323'),(30,'Mahadi-devo','2000045','dweasdwr','122323'),(31,'Mahadi-devo','2000045','dweasdwr','122323'),(32,'Mahadi-devo','2000045','dweasdwr','122323'),(33,'Mahadi-devo','2000045','dweasdwr','122323'),(34,'Mahadi-devo','2000045','dweasdwr','122323'),(35,'Mahadi-devo','2000045','dweasdwr','122323'),(36,'Mahadi-devo','2000045','dweasdwr','122323'),(37,'Mahadi-devo','2000045','dweasdwr','122323'),(38,'Mahadi-devo','2000045','dweasdwr','122323'),(39,'Mahadi-devo','2000045','dweasdwr','122323'),(40,'Mahadi-devo','2000045','dweasdwr','122323'),(41,'Mahadi-devo','2000045','dweasdwr','122323'),(42,'Mahadi-devo','2000045','dweasdwr','122323'),(43,'Mahadi-devo','2000045','dweasdwr','122323'),(44,'Mahadi-devo','2000045','dweasdwr','122323'),(45,'Mahadi-devo','2000045','dweasdwr','122323'),(46,'ABC','199113123','colombo',NULL),(47,'ABC','199113123','colombo',NULL),(48,'ABC','199113123','colombo',NULL),(49,'ABC','199113123','colombo',NULL),(50,'ABC','199113123','colombo',NULL),(51,'ABC','199113123','colombo',NULL),(52,'ABC','199113123','colombo',NULL),(53,'ABC','199113123','colombo',NULL),(54,'ABC','199113123','colombo',NULL);
 /*!40000 ALTER TABLE `passengers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,7 +362,7 @@ CREATE TABLE `payment` (
   KEY `payment_accountId_index` (`accountId`),
   CONSTRAINT `payment_accountId_index_fk` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`),
   CONSTRAINT `payment_paymentMethod_index_fk` FOREIGN KEY (`paymentMethodId`) REFERENCES `paymentmethod` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,6 +371,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (1,130,'2021-10-09','2021-10-09',1,36);
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -510,7 +524,7 @@ CREATE TABLE `tickettype` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,4 +546,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-03 22:25:27
+-- Dump completed on 2021-10-09 16:04:19

@@ -17,20 +17,20 @@ const createAccount = async (req, res, next) => {
       data: account,
     })
   } catch (e) {
-    console.log(e);
+    throw new Error(e)
   }
 };
 
 const createPayment = async (req, res, next) => {
   try {
     let account = new Account();
-    await account.addCredit(req.body.amount, req.body.accountId);
+    await account.addCredit(req.body.amount, req.body.accountId, req.body.paymentMethodId);
     res.status(200).json({
       data: null,
       success: true,
     })
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 
@@ -43,7 +43,7 @@ const getAccountInfo = async (req, res, next) => {
       success: true,
     })
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 
@@ -56,7 +56,7 @@ const getAllAccountInfo = async (req, res, next) => {
       success: true,
     })
   } catch (e) {
-    console.log(e)
+    throw new Error(e)
   }
 }
 
@@ -69,7 +69,7 @@ const accountLogin = async (req, res, next) => {
       success: true,
     })
   } catch (e) {
-    console.log(e);
+    throw new Error(e)
   }
 }
 
@@ -82,7 +82,7 @@ const checkAccountValidity = async (req, res, next) => {
       success: true,
     });
   } catch (e) {
-    console.log(e);
+    throw new Error(e)
   }
 };
 

@@ -94,11 +94,12 @@ class Ticket {
 
         const {fineValue, currentDistance} = fine.calculateFineByDistanceForTicket(ticket, currentLat, currentLong);
 
-        if (fineValue)
+        if (fineValue) {
           ticketStatus = {
             status: Ticket_Status.Invalid,
             distance: convertDistance(currentDistance, "m"),
             fine: fineValue,
+          }
           } else {
             ticketStatus = {
               status: Ticket_Status.Valid,
