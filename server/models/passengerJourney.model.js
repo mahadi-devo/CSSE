@@ -17,6 +17,42 @@ class PassengerJourney {
     this.createdAt = null;
   }
 
+  async findPassengerJourney() {
+    let whereQuary = {};
+    if (this.accountId) whereQuary.accountId = this.accountId;
+    if (this.journeyId) whereQuary.journeyId = this.journeyId;
+    console.log("🚀 ~ file: passengerJourney.model.js ~ line 20 ~ PassengerJourney ~ findPassengerJourney ~ whereQuary", whereQuary)
+    try {
+      const passengerJourney = await models.passengerhistory.findOne({
+        attributes: [
+          'id',
+          'depatureLat',
+          'depatureLong',
+          'destinationLat',
+          'destinationLong',
+          'createdAt',
+          'updatedAt',
+        ],
+        where: whereQuary,
+      });
+
+      if (passengerJourney) {
+        this.id = passengerJourney.id;
+        this.createdAt = passengerJourney.dataValues.createdAt;
+        this.updatedAt = passengerJourney.dataValues.updatedAt;
+        this.depatureLat = passengerJourney.depatureLat;
+        this.depatureLong = passengerJourney.depatureLong;
+        this.destinationLat = passengerJourney.destinationLat;
+        this.destinationLong = passengerJourney.destinationLong;
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
   async startJurney(depatureLat, depatureLong) {
     this.depatureLat = depatureLat;
     this.depatureLong = depatureLong;
