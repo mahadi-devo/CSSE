@@ -76,7 +76,7 @@ const accountLogin = async (req, res, next) => {
 const checkAccountValidity = async (req, res, next) => {
   try {
     let account = new Account();
-    const data = await account.checkAccountValidity(req.body.accountId, req.body.ticketId, req.body.currentLocationLat, req.body.currentLocationLong);
+    const data = await account.checkAccountValidity(req.body.accountId, req.body.inspectorId, req.body.currentLocationLat, req.body.currentLocationLong);
     res.status(200).json({
       data,
       success: true,

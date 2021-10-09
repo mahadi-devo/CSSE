@@ -159,7 +159,7 @@ class Account {
     }
   }
 
-  async checkAccountValidity(passengerId, inspectorId, ticketId, currentLat = null, currentLong = null) {
+  async checkAccountValidity(passengerId, inspectorId, currentLat = null, currentLong = null) {
     try {
       const passenger = await models.account.findOne({
         where: {id: passengerId},
@@ -177,29 +177,31 @@ class Account {
         throw new Error("No Inspector Account Exist");
       }
 
-      const passengerHistory = models.passengerhistory.findOne({
-        where: {id: passenger.id}
+      const passengerHistory = await models.passengerhistory.findOne({
+        where: {accountId: passenger.id}
       })
 
       const fine = new Fine(inspector.id, passenger);
-      const inspection = new Inspection(inspector.id, currentLat, currentLong, passenger.journeyId)
+      const inspection = new Inspection(inspector.employeeId, currentLat, currentLong, passengerHistory.journeyId)
       const fineAmount = await fine.calculateFineByDistanceForPassenger(passengerHistory, currentLat, currentLong);
 
       await db.transaction(async (t) => {
         await inspection.createInspection(t);
-        await fine.createFine(fineAmount, t)
-        await models.account.update(
-            {
-              creditAmount: (fine - Number(passenger.creditAmount)).toString(),
-            },
-            { where: { id: passenger.id }, transaction: t }
-        );
-        await models.passengerhistory.update(
-            {
-              fineId: fine.id,
-            },
-            { where: { accountId: passenger.id }, transaction: t }
-        );
+        if (fineAmount) {
+          await fine.createFine(fineAmount, t)
+          await models.account.update(
+              {
+                creditAmount: `${(fine - Number(passenger.creditAmount))}`,
+              },
+              { where: { id: passenger.id }, transaction: t }
+          );
+          await models.passengerhistory.update(
+              {
+                fineId: fine.id,
+              },
+              { where: { accountId: passenger.id }, transaction: t }
+          );
+        }
       });
 
       if (fineAmount) {

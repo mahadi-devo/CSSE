@@ -6,7 +6,7 @@ const { getDistance } = require("geolib");
 class Fine {
     constructor(inspectionId = null, account = null, amount = null) {
         this.inspectionId = inspectionId;
-        this.account = account.id;
+        this.account = account;
     }
 
     async createFine(amount, t) {
@@ -37,6 +37,8 @@ class Fine {
 
             if (currentDistanceCost < this.account.creditAmount) {
                 return  currentDistanceCost * 2;
+            } else {
+                return null;
             }
 
         } catch (e) {
