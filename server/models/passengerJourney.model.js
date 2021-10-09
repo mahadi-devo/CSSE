@@ -2,8 +2,9 @@ const initModels = require('../dao/init-models');
 const db = require('../config/db');
 const models = initModels(db);
 const { getDistance, convertDistance } = require('geolib');
-const REPORT = require("./report.model");
-const REPORTS = require("../common/enum/reports")
+const REPORT = require('./report.model');
+const REPORTS = require('../common/enum/reports');
+const Fare = require('./fare.model');
 
 class PassengerJourney {
   constructor(accountId = null, journeyId = null) {
@@ -21,7 +22,6 @@ class PassengerJourney {
     let whereQuary = {};
     if (this.accountId) whereQuary.accountId = this.accountId;
     if (this.journeyId) whereQuary.journeyId = this.journeyId;
-    console.log("🚀 ~ file: passengerJourney.model.js ~ line 20 ~ PassengerJourney ~ findPassengerJourney ~ whereQuary", whereQuary)
     try {
       const passengerJourney = await models.passengerhistory.findOne({
         attributes: [
@@ -53,7 +53,7 @@ class PassengerJourney {
     }
   }
 
-  async startJurney(depatureLat, depatureLong) {
+  async startJourney(depatureLat, depatureLong) {
     this.depatureLat = depatureLat;
     this.depatureLong = depatureLong;
 
@@ -73,35 +73,37 @@ class PassengerJourney {
     });
   }
 
-  async endJurney(destinationLat, destinationLong) {
+  async endJourney(destinationLat, destinationLong, isFare, isFine) {
     this.destinationLat = destinationLat;
     this.destinationLong = destinationLong;
 
     await db.transaction(async (t) => {
-      await models.passengerhistory.update(
-        {
-          destinationLat,
-          destinationLong,
-        },
-        {
-          where: {
-            journeyId: this.journeyId,
-            accountId: this.accountId,
-          },
-          transaction: t,
-        }
-      );
-
       const account = await models.account.findOne({
         attributes: ['creditAmount'],
         where: { id: this.accountId },
         transaction: t,
       });
+      console.log("🚀 ~ file: passengerJourney.model.js ~ line 86 ~ PassengerJourney ~ awaitdb.transaction ~ account", account)
 
-      const newCreditAmount =
-        (await account.creditAmount) - this.getTicketPrice();
+      const tickteAmount = await this.getTicketPrice();
+      let newCreditAmount = await account.dataValues.creditAmount;
+      let updateQuary = { destinationLat, destinationLong };
+      if (isFare) {
+        console.log("🚀 ~ file: passengerJourney.model.js ~ line 92 ~ PassengerJourney ~ awaitdb.transaction ~ isFare", isFare)
+        const fare = await new Fare(this.journeyId, this.accountId, tickteAmount);
+        console.log("🚀 ~ file: passengerJourney.model.js ~ line 94 ~ PassengerJourney ~ awaitdb.transaction ~ fare", fare)
+        
+        await fare.createFare(t);
 
-      await models.passengerhistory.update(
+        updateQuary.fareId = fare.id;
+        newCreditAmount -= tickteAmount;
+      }
+
+      if (isFine) {
+        // fine calc
+      }
+
+      await models.account.update(
         {
           creditAmount: newCreditAmount,
         },
@@ -112,11 +114,21 @@ class PassengerJourney {
           transaction: t,
         }
       );
+
+      await models.passengerhistory.update(updateQuary, {
+        where: {
+          journeyId: this.journeyId,
+          accountId: this.accountId,
+        },
+        transaction: t,
+      });
     });
   }
 
   async passengerJourneyHistory() {
-    console.log("🚀 ~ file: passengerJourney.model.js ~ line 117 ~ PassengerJourney ~ passengerJourneyHistory ~ passengerJourneyHistory")
+    console.log(
+      '🚀 ~ file: passengerJourney.model.js ~ line 117 ~ PassengerJourney ~ passengerJourneyHistory ~ passengerJourneyHistory'
+    );
     try {
       return await models.passengerhistory.findAll({
         attributes: [
@@ -130,9 +142,9 @@ class PassengerJourney {
         ],
         include: {
           model: models.journey,
-          as: "journey",
+          as: 'journey',
         },
-        where: { accountId: 35 }
+        where: { accountId: 35 },
       });
     } catch (e) {
       throw new Error(e);
@@ -140,7 +152,7 @@ class PassengerJourney {
   }
 
   async getTicketPrice() {
-    return 5 * this.getPasangerDistanceInKM();
+    return 5 * 10;
   }
 
   async getPasangerDistanceInKM() {
@@ -159,48 +171,55 @@ class PassengerJourney {
     return DistanceInM / 1000;
   }
 
-  async getAllPassengerJourney () {
-    const passengerHistory =  await models.passengerhistory.findAll({
+  async getAllPassengerJourney() {
+    const passengerHistory = await models.passengerhistory.findAll({
       include: [
-          {
+        {
           model: models.account,
           as: 'account',
-          include: { model: models.passengers, as: 'passenger'}
+          include: { model: models.passengers, as: 'passenger' },
+        },
+        {
+          model: models.journey,
+          as: 'journey',
+          include: {
+            model: models.inspection,
+            as: 'inspections',
+            include: { model: models.employee, as: 'inspection' },
           },
-          {
-            model: models.journey,
-            as: 'journey',
-            include: {
-              model: models.inspection,
-              as: 'inspections',
-              include: { model: models.employee, as: 'inspection'}
-            }
+        },
+        {
+          model: models.journey,
+          as: 'journey',
+          include: {
+            model: models.inspection,
+            as: 'inspections',
+            include: { model: models.employee, as: 'inspection' },
           },
-          {
-            model: models.journey,
-            as: 'journey',
-            include: {
-              model: models.inspection,
-              as: 'inspections',
-              include: { model: models.employee, as: 'inspection'}
-            }
-          },
-          {
-            model: models.fine,
-            as: 'fine'
-          },
-          {
-            model: models.fare,
-            as: 'fare'
-          },
-        ]
-    })
+        },
+        {
+          model: models.fine,
+          as: 'fine',
+        },
+        {
+          model: models.fare,
+          as: 'fare',
+        },
+      ],
+    });
 
-    const header = ['Account Id', 'Date', 'Departure', 'Destination', 'Fair', 'Fines']
-    let body = []
+    const header = [
+      'Account Id',
+      'Date',
+      'Departure',
+      'Destination',
+      'Fair',
+      'Fines',
+    ];
+    let body = [];
 
-    passengerHistory.forEach(passenger => {
-      const detailsObj = {}
+    passengerHistory.forEach((passenger) => {
+      const detailsObj = {};
       detailsObj.accountId = passenger.account.id;
       detailsObj.Date = passenger.createdAt;
       detailsObj.depatureLocation = passenger.depatureLocation;
@@ -208,20 +227,24 @@ class PassengerJourney {
       detailsObj.fair = passenger.fair;
       detailsObj.fain = passenger.fain;
       body.push(detailsObj);
-    })
-    const report = new REPORT(REPORTS.JOURNEY_DETAILS.title, REPORTS.JOURNEY_DETAILS.description, REPORTS.JOURNEY_DETAILS.type);
+    });
+    const report = new REPORT(
+      REPORTS.JOURNEY_DETAILS.title,
+      REPORTS.JOURNEY_DETAILS.description,
+      REPORTS.JOURNEY_DETAILS.type
+    );
     const journeyDetailsReport = await report.createReport(header, body);
 
-    return { passengerHistory, journeyDetailsReport}
+    return { passengerHistory, journeyDetailsReport };
   }
 
   async getPassengerJourney() {
-    return  await models.passengerhistory.findAll({
+    return await models.passengerhistory.findAll({
       include: [
         {
           model: models.account,
           as: 'account',
-          include: { model: models.passengers, as: 'passenger'}
+          include: { model: models.passengers, as: 'passenger' },
         },
         {
           model: models.journey,
@@ -229,8 +252,8 @@ class PassengerJourney {
           include: {
             model: models.inspection,
             as: 'inspections',
-            include: { model: models.employee, as: 'inspection'}
-          }
+            include: { model: models.employee, as: 'inspection' },
+          },
         },
         {
           model: models.journey,
@@ -238,20 +261,20 @@ class PassengerJourney {
           include: {
             model: models.inspection,
             as: 'inspections',
-            include: { model: models.employee, as: 'inspection'}
-          }
+            include: { model: models.employee, as: 'inspection' },
+          },
         },
         {
           model: models.fine,
-          as: 'fine'
+          as: 'fine',
         },
         {
           model: models.fare,
-          as: 'fare'
+          as: 'fare',
         },
       ],
-      where: { id: this.accountId }
-    })
+      where: { id: this.accountId },
+    });
   }
 }
 

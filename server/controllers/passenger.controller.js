@@ -2,14 +2,14 @@ const PassengerJourney = require('../models/passengerJourney.model');
 
 const passengerJourney = async (req, res, next) => {
   try {
-    const { accountId, journeyId, depatureLat, depatureLong } = req.body;
+    const { accountId, journeyId, depatureLat, depatureLong, isFare, isFine } = req.body;
     const passengerJourney = new PassengerJourney(accountId, journeyId);
-    console.log("🚀 ~ file: passenger.controller.js ~ line 7 ~ passengerJourney ~ passengerJourney", passengerJourney)
     const val = await passengerJourney.findPassengerJourney();
     if (!val) {
-      passengerJourney.startJurney(depatureLat, depatureLong);
+      passengerJourney.startJourney(depatureLat, depatureLong);
     } else {
-      passengerJourney.endJurney(depatureLat, depatureLong);
+      console.log("🚀 ~ file: passenger.controller.js ~ line 12 ~ passengerJourney ~ else", depatureLat, depatureLong, isFare, isFine)
+      passengerJourney.endJourney(depatureLat, depatureLong, isFare, isFine);
     }
     res.status(200).json({
       success: true,
