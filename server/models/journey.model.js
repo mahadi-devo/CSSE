@@ -31,7 +31,7 @@ class Journey {
   async getJourny(journeyId) {
     try {
       return models.journey.findOne({
-        attributes: ['id', 'busId', 'routeId', 'startDateTime', 'endDateTime'],
+        attributes: ['id', 'busId', 'routeId', 'createdAt', 'updatedAt'],
         where: { id: journeyId },
       });
     } catch (e) {
@@ -42,7 +42,7 @@ class Journey {
   async getAllJourny(journeyId) {
     try {
       return models.journey.findAll({
-        attributes: ['id', 'busId', 'routeId', 'startDateTime', 'endDateTime'],
+        attributes: ['id', 'busId', 'routeId', 'createdAt', 'updatedAt'],
       });
     } catch (e) {
       throw new Error(e);
