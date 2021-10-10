@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ticketingsystem
 -- ------------------------------------------------------
--- Server version	8.0.25
+-- Server version	8.0.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,16 +23,16 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `createdAt` date NOT NULL,
   `creditAmount` float NOT NULL DEFAULT '100',
   `updatedAt` date NOT NULL,
-  `passengerId` int DEFAULT NULL,
+  `passengerId` int(11) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `qrCode` longtext,
-  `employeeId` int DEFAULT NULL,
-  `accountTypeId` int NOT NULL DEFAULT '1',
+  `employeeId` int(11) DEFAULT NULL,
+  `accountTypeId` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `account_passenger_index` (`passengerId`),
   KEY `account_accountType_index` (`accountTypeId`),
@@ -49,7 +49,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (36,'2021-10-09',250,'2021-10-09',51,'mahadihassan083@gmail.com','$2a$10$JGpyWCb53/mp1ch/yHdo1..rb35np4wrcxOUzumYRsQtGIvnPCetC','data:image/png;base64,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',NULL,1),(37,'2021-10-09',120,'2021-10-09',52,'mahadihassan083@gmail.com','$2a$10$7w5dlhtp2tolRaMPkVMUT.vM3348Hf2QwjgJgwrS4w3MLyvRRu/82','data:image/png;base64,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',NULL,1);
+INSERT INTO `account` VALUES (36,'2021-10-09',24800,'2021-10-09',51,'mahadihassan083@gmail.com','$2a$10$JGpyWCb53/mp1ch/yHdo1..rb35np4wrcxOUzumYRsQtGIvnPCetC','data:image/png;base64,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',NULL,1),(37,'2021-10-09',20,'2021-10-09',52,'mahadihassan083@gmail.com','$2a$10$7w5dlhtp2tolRaMPkVMUT.vM3348Hf2QwjgJgwrS4w3MLyvRRu/82','data:image/png;base64,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',NULL,1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `accounttype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `accounttype` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -85,12 +85,12 @@ DROP TABLE IF EXISTS `bus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bus` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` enum('normal','semi','luxuary') NOT NULL DEFAULT 'normal',
   `driverName` varchar(45) DEFAULT 'UNKNOWN',
-  `status` int NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,9 +111,9 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `employeeTypeId` int NOT NULL,
+  `employeeTypeId` int(11) NOT NULL,
   `age` varchar(45) DEFAULT NULL,
   `createdAt` date NOT NULL,
   `updatedAt` date NOT NULL,
@@ -141,7 +141,7 @@ DROP TABLE IF EXISTS `employeetype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employeetype` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -165,14 +165,14 @@ DROP TABLE IF EXISTS `fare`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fare` (
-  `id` int NOT NULL,
-  `amount` int NOT NULL,
-  `journeyId` int NOT NULL,
-  `passengerHistoryId` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` int(11) NOT NULL,
+  `journeyId` int(11) NOT NULL,
+  `passengerHistoryId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fare_journeyId_index` (`journeyId`),
   CONSTRAINT `fare_journeyId_index_fk` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,6 +181,7 @@ CREATE TABLE `fare` (
 
 LOCK TABLES `fare` WRITE;
 /*!40000 ALTER TABLE `fare` DISABLE KEYS */;
+INSERT INTO `fare` VALUES (1,50,2,36),(2,50,2,36),(3,50,2,36),(4,50,2,37),(5,50,5,37),(6,50,5,36);
 /*!40000 ALTER TABLE `fare` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,17 +193,18 @@ DROP TABLE IF EXISTS `fine`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fine` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `amount` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` int(11) NOT NULL,
   `createdAt` date NOT NULL,
-  `accountId` int DEFAULT NULL,
-  `inspectionId` int DEFAULT NULL,
+  `accountId` int(11) DEFAULT NULL,
+  `inspectionId` int(11) DEFAULT NULL,
+  `updatedAt` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fine_accountId_index_fk_idx` (`accountId`),
   KEY `fine_inspectionId_index` (`inspectionId`),
   CONSTRAINT `fine_accountId_index_fk` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`),
   CONSTRAINT `fine_inspectionId_index_fk` FOREIGN KEY (`inspectionId`) REFERENCES `inspection` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,6 +213,7 @@ CREATE TABLE `fine` (
 
 LOCK TABLES `fine` WRITE;
 /*!40000 ALTER TABLE `fine` DISABLE KEYS */;
+INSERT INTO `fine` VALUES (1,100,'2021-10-10',36,1,'2021-10-10');
 /*!40000 ALTER TABLE `fine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,11 +225,11 @@ DROP TABLE IF EXISTS `inspection`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inspection` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `createdAt` date NOT NULL,
   `description` varchar(45) NOT NULL DEFAULT 'Normal Inspection',
-  `journeyId` int DEFAULT NULL,
-  `inspectorId` int NOT NULL,
+  `journeyId` int(11) DEFAULT NULL,
+  `inspectorId` int(11) NOT NULL,
   `updatedAt` date DEFAULT NULL,
   `inspectionLat` varchar(100) NOT NULL,
   `inspectionLong` varchar(100) NOT NULL,
@@ -235,7 +238,7 @@ CREATE TABLE `inspection` (
   KEY `inspection_inspectorId_index` (`inspectorId`),
   CONSTRAINT `inspection_inspectorId_index_fk` FOREIGN KEY (`inspectorId`) REFERENCES `employee` (`id`),
   CONSTRAINT `inspection_journeyId_index_fk` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,6 +247,7 @@ CREATE TABLE `inspection` (
 
 LOCK TABLES `inspection` WRITE;
 /*!40000 ALTER TABLE `inspection` DISABLE KEYS */;
+INSERT INTO `inspection` VALUES (1,'2021-10-10','adfsa',2,1,'2021-10-10','3245','425435');
 /*!40000 ALTER TABLE `inspection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,17 +259,17 @@ DROP TABLE IF EXISTS `journey`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `journey` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `createdAt` date NOT NULL,
   `updatedAt` date NOT NULL,
-  `busId` int NOT NULL,
-  `routeId` int NOT NULL,
+  `busId` int(11) NOT NULL,
+  `routeId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `journey_busId_index_fk_idx` (`busId`),
   KEY `journey_routeId_index_fk_idx` (`routeId`),
   CONSTRAINT `journey_busId_index_fk` FOREIGN KEY (`busId`) REFERENCES `bus` (`id`),
   CONSTRAINT `journey_routeId_index_fk` FOREIGN KEY (`routeId`) REFERENCES `route` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +278,7 @@ CREATE TABLE `journey` (
 
 LOCK TABLES `journey` WRITE;
 /*!40000 ALTER TABLE `journey` DISABLE KEYS */;
+INSERT INTO `journey` VALUES (2,'2021-10-09','2021-10-09',1,1),(3,'2021-10-09','2021-10-09',1,1),(4,'2021-10-09','2021-10-09',1,1),(5,'2021-10-09','2021-10-09',2,1);
 /*!40000 ALTER TABLE `journey` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,26 +290,27 @@ DROP TABLE IF EXISTS `passengerhistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `passengerhistory` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `depatureLat` varchar(45) NOT NULL,
   `depatureLong` varchar(45) NOT NULL,
   `destinationLat` varchar(45) DEFAULT NULL,
   `destinationLong` varchar(45) DEFAULT NULL,
   `createdAt` date NOT NULL,
   `updatedAt` date DEFAULT NULL,
-  `accountId` int NOT NULL,
-  `journeyId` int NOT NULL,
-  `fineId` int DEFAULT NULL,
-  `fareId` int DEFAULT NULL,
+  `accountId` int(11) NOT NULL,
+  `journeyId` int(11) NOT NULL,
+  `fineId` int(11) DEFAULT NULL,
+  `fareId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `passengerhistory_fk_accountid_idx` (`accountId`),
   KEY `passengerhistory_fk_journeyid_idx` (`journeyId`),
   KEY `passengerhistory_fineId_idx` (`fineId`) /*!80000 INVISIBLE */,
   KEY `passengerhistory_fareId_index` (`fareId`) USING BTREE,
+  CONSTRAINT `passengerhistory_fareId_idx_fk` FOREIGN KEY (`fareId`) REFERENCES `fare` (`id`),
   CONSTRAINT `passengerhistory_fineId_idx_fk` FOREIGN KEY (`fineId`) REFERENCES `fine` (`id`),
   CONSTRAINT `passengerhistory_fk_accountid` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`),
   CONSTRAINT `passengerhistory_fk_journeyid` FOREIGN KEY (`journeyId`) REFERENCES `journey` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,6 +319,7 @@ CREATE TABLE `passengerhistory` (
 
 LOCK TABLES `passengerhistory` WRITE;
 /*!40000 ALTER TABLE `passengerhistory` DISABLE KEYS */;
+INSERT INTO `passengerhistory` VALUES (5,'8.142135','80.96973','8.041785','80.953232','2021-10-09','2021-10-09',36,2,1,3),(6,'8.142135','80.96973','8.041785','80.953232','2021-10-09','2021-10-09',37,2,NULL,4),(7,'8.142135','80.96973','8.041785','80.953232','2021-10-09','2021-10-09',37,5,NULL,5),(8,'8.142135','80.96973','8.041785','80.953232','2021-10-09','2021-10-09',36,5,1,6);
 /*!40000 ALTER TABLE `passengerhistory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,7 +331,7 @@ DROP TABLE IF EXISTS `passengers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `passengers` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `nic` varchar(20) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
@@ -351,12 +358,12 @@ DROP TABLE IF EXISTS `payment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `amount` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` int(11) NOT NULL,
   `createdAt` date NOT NULL,
   `updatedAt` date NOT NULL,
-  `paymentMethodId` int NOT NULL DEFAULT '1',
-  `accountId` int NOT NULL,
+  `paymentMethodId` int(11) NOT NULL DEFAULT '1',
+  `accountId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `payment_paymentMethod_index_fk_idx` (`paymentMethodId`),
   KEY `payment_accountId_index` (`accountId`),
@@ -383,7 +390,7 @@ DROP TABLE IF EXISTS `paymentmethod`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `paymentmethod` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -407,11 +414,12 @@ DROP TABLE IF EXISTS `report`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `report` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` varchar(45) NOT NULL,
-  `reportTypeId` int NOT NULL,
+  `reportTypeId` int(11) NOT NULL,
   `createdAt` date NOT NULL,
+  `updatedAt` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `report_reportTypeId_idx` (`reportTypeId`),
   CONSTRAINT `report_reportTypeId_idx_fk` FOREIGN KEY (`reportTypeId`) REFERENCES `reporttype` (`id`)
@@ -435,7 +443,7 @@ DROP TABLE IF EXISTS `reporttype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reporttype` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -459,14 +467,14 @@ DROP TABLE IF EXISTS `route`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `route` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `depatureLat` varchar(45) NOT NULL,
   `depatureLong` varchar(45) NOT NULL,
   `destinationLat` varchar(45) NOT NULL,
   `destinationLong` varchar(45) NOT NULL,
-  `stopCount` int NOT NULL,
+  `stopCount` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -475,6 +483,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
+INSERT INTO `route` VALUES (1,'2345','245','245','245',6);
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -486,14 +495,14 @@ DROP TABLE IF EXISTS `ticket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `price` float NOT NULL,
   `createdAt` date NOT NULL,
   `updatedAt` date NOT NULL,
   `destinationLat` varchar(100) DEFAULT NULL,
   `validityPeriod` varchar(45) NOT NULL,
   `issuedLocationLat` varchar(100) NOT NULL,
-  `ticketTypeId` int NOT NULL,
+  `ticketTypeId` int(11) NOT NULL,
   `destinationLong` varchar(100) NOT NULL,
   `qrCode` longtext,
   `issuedLocationLong` varchar(100) NOT NULL,
@@ -521,10 +530,10 @@ DROP TABLE IF EXISTS `tickettype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tickettype` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -546,4 +555,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-09 16:04:19
+-- Dump completed on 2021-10-10 22:13:33
