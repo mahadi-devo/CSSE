@@ -49,7 +49,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     fareId: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'fare',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
@@ -83,6 +87,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "fineId" },
+        ]
+      },
+      {
+        name: "passengerhistory_fareId_index",
+        using: "BTREE",
+        fields: [
+          { name: "fareId" },
         ]
       },
     ]

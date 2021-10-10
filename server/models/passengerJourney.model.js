@@ -83,16 +83,29 @@ class PassengerJourney {
         where: { id: this.accountId },
         transaction: t,
       });
-      console.log("🚀 ~ file: passengerJourney.model.js ~ line 86 ~ PassengerJourney ~ awaitdb.transaction ~ account", account)
+      console.log(
+        '🚀 ~ file: passengerJourney.model.js ~ line 86 ~ PassengerJourney ~ awaitdb.transaction ~ account',
+        account
+      );
 
       const tickteAmount = await this.getTicketPrice();
       let newCreditAmount = await account.dataValues.creditAmount;
       let updateQuary = { destinationLat, destinationLong };
       if (isFare) {
-        console.log("🚀 ~ file: passengerJourney.model.js ~ line 92 ~ PassengerJourney ~ awaitdb.transaction ~ isFare", isFare)
-        const fare = await new Fare(this.journeyId, this.accountId, tickteAmount);
-        console.log("🚀 ~ file: passengerJourney.model.js ~ line 94 ~ PassengerJourney ~ awaitdb.transaction ~ fare", fare)
-        
+        console.log(
+          '🚀 ~ file: passengerJourney.model.js ~ line 92 ~ PassengerJourney ~ awaitdb.transaction ~ isFare',
+          isFare
+        );
+        const fare = await new Fare(
+          this.journeyId,
+          this.accountId,
+          tickteAmount
+        );
+        console.log(
+          '🚀 ~ file: passengerJourney.model.js ~ line 94 ~ PassengerJourney ~ awaitdb.transaction ~ fare',
+          fare
+        );
+
         await fare.createFare(t);
 
         updateQuary.fareId = fare.id;
@@ -144,7 +157,7 @@ class PassengerJourney {
           model: models.journey,
           as: 'journey',
         },
-        where: { accountId: 35 },
+        where: { accountId: this.accountId },
       });
     } catch (e) {
       throw new Error(e);
@@ -172,70 +185,78 @@ class PassengerJourney {
   }
 
   async getAllPassengerJourney() {
-    const passengerHistory = await models.passengerhistory.findAll({
-      include: [
-        {
-          model: models.account,
-          as: 'account',
-          include: { model: models.passengers, as: 'passenger' },
-        },
-        {
-          model: models.journey,
-          as: 'journey',
-          include: {
-            model: models.inspection,
-            as: 'inspections',
-            include: { model: models.employee, as: 'inspection' },
+    try {
+      const passengerHistory = await models.passengerhistory.findAll({
+        include: [
+          {
+            model: models.account,
+            as: 'account',
+            include: { model: models.passengers, as: 'passenger' },
           },
-        },
-        {
-          model: models.journey,
-          as: 'journey',
-          include: {
-            model: models.inspection,
-            as: 'inspections',
-            include: { model: models.employee, as: 'inspection' },
+          {
+            model: models.journey,
+            as: 'journey',
+            include: {
+              model: models.inspection,
+              as: 'inspections',
+              include: { model: models.employee, as: 'inspector' },
+            },
           },
-        },
-        {
-          model: models.fine,
-          as: 'fine',
-        },
-        {
-          model: models.fare,
-          as: 'fare',
-        },
-      ],
-    });
+          {
+            model: models.fine,
+            as: 'fine',
+          },
+          {
+            model: models.fare,
+            as: 'fare',
+          },
+        ],
+      });
 
-    const header = [
-      'Account Id',
-      'Date',
-      'Departure',
-      'Destination',
-      'Fair',
-      'Fines',
-    ];
-    let body = [];
+      const header = [
+        'Account Id',
+        'Date',
+        'Departure',
+        'Destination',
+        'Fair',
+        'Fines',
+      ];
+      let body = [];
 
-    passengerHistory.forEach((passenger) => {
-      const detailsObj = {};
-      detailsObj.accountId = passenger.account.id;
-      detailsObj.Date = passenger.createdAt;
-      detailsObj.depatureLocation = passenger.depatureLocation;
-      detailsObj.destinationLocation = passenger.destinationLocation;
-      detailsObj.fair = passenger.fair;
-      detailsObj.fain = passenger.fain;
-      body.push(detailsObj);
-    });
-    const report = new REPORT(
-      REPORTS.JOURNEY_DETAILS.title,
-      REPORTS.JOURNEY_DETAILS.description,
-      REPORTS.JOURNEY_DETAILS.type
-    );
-    const journeyDetailsReport = await report.createReport(header, body);
+      const data = passengerHistory.map((passenger) =>
+        passenger.get({ plain: true })
+      );
 
-    return { passengerHistory, journeyDetailsReport };
+      data.forEach((passenger) => {
+        const detailsObj = {};
+        detailsObj.accountId = passenger.account.id;
+        detailsObj.accountId = passenger.account.passenger.name;
+        detailsObj.Date = passenger.createdAt;
+        detailsObj.depatureLocation = {
+          lat: passenger.depatureLat,
+          long: passenger.depatureLong,
+        };
+        detailsObj.destinationLocation = {
+          lat: passenger.destinationLat,
+          long: passenger.destinationLong,
+        };
+        detailsObj.fare = (passenger.fare && passenger.fare['amount']) || null;
+        detailsObj.fine = (passenger.fine && passenger.fine['amount']) || null;
+        body.push(detailsObj);
+      });
+
+      // const report = new REPORT(
+      //   REPORTS.JOURNEY_DETAILS.title,
+      //   REPORTS.JOURNEY_DETAILS.description,
+      //   REPORTS.JOURNEY_DETAILS.type
+      // );
+      // const journeyDetailsReport = await report.createReport(header, body);
+      // const journeyDetailsReport = body;
+
+      return { passengerHistory, body };
+    } catch (error) {
+      console.log("🚀 ~ file: passengerJourney.model.js ~ line 262 ~ PassengerJourney ~ getAllPassengerJourney ~ error", error)
+    }
   }
 
   async getPassengerJourney() {
@@ -252,16 +273,7 @@ class PassengerJourney {
           include: {
             model: models.inspection,
             as: 'inspections',
-            include: { model: models.employee, as: 'inspection' },
-          },
-        },
-        {
-          model: models.journey,
-          as: 'journey',
-          include: {
-            model: models.inspection,
-            as: 'inspections',
-            include: { model: models.employee, as: 'inspection' },
+            include: { model: models.employee, as: 'inspector' },
           },
         },
         {
@@ -273,7 +285,7 @@ class PassengerJourney {
           as: 'fare',
         },
       ],
-      where: { id: this.accountId },
+      where: { accountId: this.accountId },
     });
   }
 }

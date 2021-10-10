@@ -1,6 +1,7 @@
 const initModels = require("../dao/init-models");
 const db = require("../config/db");
 const models = initModels(db);
+const generatePdf = require('../common/reportTemplates/commonReportTemplate')
 
 class Report {
     constructor(name, description, reportTypeId) {
@@ -17,6 +18,7 @@ class Report {
             reportTypeId: this.reportTypeId,
         })
         return await generatePdf(report.id,this.name, header, body)
+        // return 'jhjsdghjsadfg';
     }
 }
 
