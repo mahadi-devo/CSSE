@@ -3,25 +3,19 @@ const fs = require('fs');
 const getStream = require('get-stream');
 
 const generatePdf = async (reportId, title, headers, body) => {
+console.log("🚀 ~ file: commonReportTemplate.js ~ line 6 ~ generatePdf ~ reportId, title, headers, body", reportId, title, headers, body)
   const printer = new PdfPrinter(fonts);
 
   const docDefinition = {
     content: [
-      { text: title, style: 'header' },
-      {
-        layout: 'lightHorizontalLines',
-        table: {
-          headerRows: headers.length,
-          body: [headers, body],
-        },
-      },
-    ],
-    defaultStyle: {
-      font: 'Helvetica',
-    },
+		'First paragraph',
+		'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines'
+	]
   };
+  console.log("🚀 ~ file: commonReportTemplate.js ~ line 24 ~ generatePdf ~ docDefinition", docDefinition)
 
   const pdfDoc = printer.createPdfKitDocument(docDefinition);
+  console.log("🚀 ~ file: commonReportTemplate.js ~ line 27 ~ generatePdf ~ pdfDoc", pdfDoc)
 
   pdfDoc.end();
 
@@ -58,4 +52,4 @@ const fonts = {
   },
 };
 
-module.export = generatePdf;
+module.exports = generatePdf;

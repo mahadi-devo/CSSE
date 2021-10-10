@@ -215,6 +215,7 @@ class PassengerJourney {
 
       const header = [
         'Account Id',
+        'Passenger Name',
         'Date',
         'Departure',
         'Destination',
@@ -230,32 +231,56 @@ class PassengerJourney {
       data.forEach((passenger) => {
         const detailsObj = {};
         detailsObj.accountId = passenger.account.id;
-        detailsObj.accountId = passenger.account.passenger.name;
+        // detailsObj.passengerName = 'name';
+        detailsObj.passengerName = passenger.account.passenger.name;
         detailsObj.Date = passenger.createdAt;
-        detailsObj.depatureLocation = {
-          lat: passenger.depatureLat,
-          long: passenger.depatureLong,
-        };
-        detailsObj.destinationLocation = {
-          lat: passenger.destinationLat,
-          long: passenger.destinationLong,
-        };
+        detailsObj.depatureLocation = 'test';
+        // {
+        //   lat: passenger.depatureLat,
+        //   long: passenger.depatureLong,
+        // };
+        detailsObj.destinationLocation = 'test';
+        // {
+        //   lat: passenger.destinationLat,
+        //   long: passenger.destinationLong,
+        // };
         detailsObj.fare = (passenger.fare && passenger.fare['amount']) || null;
         detailsObj.fine = (passenger.fine && passenger.fine['amount']) || null;
         body.push(detailsObj);
       });
 
-      // const report = new REPORT(
-      //   REPORTS.JOURNEY_DETAILS.title,
-      //   REPORTS.JOURNEY_DETAILS.description,
-      //   REPORTS.JOURNEY_DETAILS.type
-      // );
-      // const journeyDetailsReport = await report.createReport(header, body);
+      /**
+       *{
+          "accountId": "ABC",
+          "Date": "2021-10-09",
+          "depatureLocation": {
+              "lat": "8.142135",
+              "long": "80.96973"
+          },
+          "destinationLocation": {
+              "lat": "8.041785",
+              "long": "80.953232"
+          },
+          "fare": 50,
+          "fine": 100
+        },
+       */
+
+      const report = new REPORT(
+        REPORTS.JOURNEY_DETAILS.title,
+        REPORTS.JOURNEY_DETAILS.description,
+        REPORTS.JOURNEY_DETAILS.type
+      );
+
+      const journeyDetailsReport = await report.createReport(header, body);
       // const journeyDetailsReport = body;
 
       return { passengerHistory, body };
     } catch (error) {
-      console.log("🚀 ~ file: passengerJourney.model.js ~ line 262 ~ PassengerJourney ~ getAllPassengerJourney ~ error", error)
+      console.log(
+        '🚀 ~ file: passengerJourney.model.js ~ line 262 ~ PassengerJourney ~ getAllPassengerJourney ~ error',
+        error
+      );
     }
   }
 
