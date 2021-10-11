@@ -82,7 +82,7 @@ class Account {
         }, { transaction: t })
         await models.account.update(
           {
-            creditAmount: (Number(account.creditAmount) + amount).toString(),
+            creditAmount: (Number(account.creditAmount) + Number(amount)).toString(),
           },
           { where: { id: account.id }, transaction: t }
         );

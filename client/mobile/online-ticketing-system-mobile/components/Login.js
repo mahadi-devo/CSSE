@@ -37,7 +37,7 @@ const Login = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    navigation.navigate('Inspector Dashboard');
+    // navigation.navigate('Inspector Dashboard');
     const data = {
       email,
       password,
@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
 
     try {
       const res = await axios.post(
-        'http://a27b-112-134-228-132.ngrok.io/api/v1/auth/login',
+        'http://localhost:5000/api/v1/auth/login',
         data,
         config
       );

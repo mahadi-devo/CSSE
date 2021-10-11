@@ -22,7 +22,7 @@ const config = {
 
 const Register = ({ navigation }) => {
   const [data, setData] = useState({
-    creditAmount: null,
+    creditAmount: 100,
     name: '',
     nic: '',
     address: '',
@@ -40,7 +40,7 @@ const Register = ({ navigation }) => {
   const onSubmit = async () => {
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/v1/ticket',
+        'http://localhost:5000/api/v1/account',
         data,
         config
       );
