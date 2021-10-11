@@ -47,7 +47,7 @@ const AvailableCredit = ({ route, navigation }) => {
         paddingBottom='10'>
         <Stack mx='4'>
           <Heading mb='5'>Available Amount - Rs: {amount && amount}</Heading>
-          <Button onPress={() => navigation.navigate('TopUp')}>TopUp</Button>
+          <Button onPress={() => navigation.navigate('TopUp', route.params)}>TopUp</Button>
         </Stack>
       </Box>
     </Center>
