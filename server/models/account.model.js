@@ -189,12 +189,12 @@ class Account {
         await inspection.createInspection(t);
         if (fineAmount) {
           await fine.createFine(fineAmount, t)
-          await models.account.update(
-              {
-                creditAmount: `${(fineAmount - Number(passenger.creditAmount))}`,
-              },
-              { where: { id: passenger.id }, transaction: t }
-          );
+          // await models.account.update(
+          //     {
+          //       creditAmount: `${(fineAmount - Number(passenger.creditAmount))}`,
+          //     },
+          //     { where: { id: passenger.id }, transaction: t }
+          // );
           await models.passengerhistory.update(
               {
                 fineId: fine.id,
