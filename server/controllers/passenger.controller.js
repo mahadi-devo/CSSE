@@ -4,6 +4,10 @@ const passengerJourney = async (req, res, next) => {
   try {
     const { accountId, journeyId, depatureLat, depatureLong, isFare, isFine } =
       req.body;
+    console.log(
+      '🚀 ~ file: passenger.controller.js ~ line 7 ~ passengerJourney ~ req.body',
+      req.body
+    );
     const passengerJourney = new PassengerJourney(accountId, journeyId);
     const val = await passengerJourney.findPassengerJourney();
     if (!val) {
