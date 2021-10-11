@@ -90,6 +90,10 @@ class Ticket {
       }
       let ticketStatus;
       const fine = new Fine();
+      const inspection = new Inspection(inspectorId, currentLat, currentLong)
+      await db.transaction(async (t) => {
+        await inspection.createInspection(t)
+      });
       if (ticket.ticketTypeId === TicketType.One_Way_Ticket) {
 
         const {fineValue, currentDistance} = fine.calculateFineByDistanceForTicket(ticket, currentLat, currentLong);
@@ -100,6 +104,7 @@ class Ticket {
             distance: convertDistance(currentDistance, "m"),
             fine: fineValue,
           }
+          await  fine.createFine(ticketStatus.fine)
           } else {
             ticketStatus = {
               status: Ticket_Status.Valid,
@@ -117,18 +122,13 @@ class Ticket {
             status: Ticket_Status.Invalid,
             fine: fineValue,
           };
+          await  fine.createFine(ticketStatus.fine)
         } else {
           ticketStatus = {
             status: Ticket_Status.Valid,
           };
         }
       }
-
-      const inspection = new Inspection(inspectorId, currentLat, currentLong)
-      await db.transaction(async (t) => {
-        await inspection.createInspection(t)
-        await  fine.createFine(ticketStatus.fine,t)
-      });
 
       return ticketStatus;
     } catch (e) {
