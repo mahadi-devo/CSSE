@@ -12,90 +12,51 @@ import {
   NativeBaseProvider,
 } from 'native-base';
 import Geocoder from 'react-native-geocoding';
+import axios from 'axios';
 
 Geocoder.init('AIzaSyBJ6etA3VFhb6LPKJ30iQj1Mf30o-OV4Ow');
-
-const data = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    fair: 20,
-    timeStamp: '12:47 PM',
-    destinationLong: 79.8752768,
-    destinationLat: 7.2351744,
-    issuedLocationLat: 7.227817612991054,
-    issuedLocationLong: 79.89985870079776,
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    fair: 30,
-    timeStamp: '11:11 PM',
-    destinationLong: 79.8752768,
-    destinationLat: 7.2351744,
-    issuedLocationLat: 7.227817612991054,
-    issuedLocationLong: 79.89985870079776,
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    fair: 10,
-    timeStamp: '6:22 PM',
-    destinationLong: 79.8752768,
-    destinationLat: 7.2351744,
-    issuedLocationLat: 7.227817612991054,
-    issuedLocationLong: 79.89985870079776,
-  },
-  {
-    id: '68694a0f-3da1-431f-bd56-142371e29d72',
-    fair: 60,
-    timeStamp: '8:56 PM',
-    destinationLong: 79.8752768,
-    destinationLat: 7.2351744,
-    issuedLocationLat: 7.227817612991054,
-    issuedLocationLong: 79.89985870079776,
-  },
-  {
-    id: '28694a0f-3da1-471f-bd96-142456e29d72',
-    fair: 80,
-    timeStamp: '12:47 PM',
-    recentText: 'I will call today.',
-    destinationLong: 79.8752768,
-    destinationLat: 7.2351744,
-    issuedLocationLat: 7.227817612991054,
-    issuedLocationLong: 79.89985870079776,
-  },
-];
 
 const getGeoCode = async (lat, long) => {
   let addressComponent;
   await Geocoder.from(lat, long)
     .then((json) => {
       addressComponent = json.results[0].formatted_address;
-      console.log(addressComponent);
     })
     .catch((error) => console.warn(error));
 
   return addressComponent;
 };
 
-const InspectionDetails = ({ navigation }) => {
+const InspectionDetails = ({ route, navigation }) => {
   const [state, setState] = useState(null);
-
+  const { id } = route.params;
   useEffect(() => {
-    dataMan();
+    apiCall();
   }, []);
 
-  const dataMan = async () => {
+  const apiCall = async () => {
+    try {
+      const res = await axios.get(
+        `http://192.168.1.4:5000/api/v1/passenger/journeyDetails/${id}`
+      );
+
+      dataMan(res.data.data);
+    } catch (error) {}
+  };
+
+  const dataMan = async (data) => {
     const arr = [];
     for (let index = 0; index < data.length; index++) {
       let obj = {
         id: data[index].id,
-        fair: data[index].fair,
+        fair: data[index].fare.amount,
         destination: await getGeoCode(
           data[index].destinationLat,
           data[index].destinationLong
         ),
         start: await getGeoCode(
-          data[index].issuedLocationLat,
-          data[index].issuedLocationLong
+          data[index].depatureLat,
+          data[index].depatureLong
         ),
       };
 
@@ -104,6 +65,7 @@ const InspectionDetails = ({ navigation }) => {
 
     setState(arr);
   };
+
   return (
     <Box
       w={{

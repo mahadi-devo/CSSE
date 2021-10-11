@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Geocoder.init('AIzaSyBJ6etA3VFhb6LPKJ30iQj1Mf30o-OV4Ow');
 
 const ValidityScreen = ({ route, navigation }) => {
+  const { scanData, loggedUser } = route.params;
   const {
     id,
     ticketTypeId,
@@ -30,13 +31,11 @@ const ValidityScreen = ({ route, navigation }) => {
     issuedLocationLat,
     issuedLocationLong,
     validityPeriod,
-  } = route.params;
+  } = scanData;
 
   const [validity, setValidity] = useState('');
-  const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState('');
   const [startLocation, setStartLocation] = useState('');
-  const [account, setAccount] = useState('');
   const [fine, setFine] = useState('');
 
   const config = {
@@ -60,40 +59,27 @@ const ValidityScreen = ({ route, navigation }) => {
         setStartLocation(addressComponent);
       })
       .catch((error) => console.warn(error));
-    getData();
   }, []);
 
-  useEffect(() => {
-    if (location) {
-      apiCall();
-    }
-  }, [location]);
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('account');
-
-      setAccount(JSON.parse(jsonValue));
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  const apiCall = async () => {
+  const apiCall = async (location) => {
     const data = {
       ticketId: id,
       currentLocationLat: location.coords.latitude,
       currentLocationLong: location.coords.longitude,
-      InspectorId: account.id,
+      InspectorId: loggedUser.id,
     };
+    console.log(
+      '🚀 ~ file: ValidityScreen.js ~ line 89 ~ apiCall ~ data',
+      data
+    );
 
     const res = await axios.post(
-      'http://localhost/api/v1/ticket/valid-ticket',
+      'http://192.168.1.4:5000/api/v1/ticket/valid-ticket',
       data,
       config
     );
     setValidity(res.data.data.status);
-    setFine(res.data.data.fine)
+    setFine(res.data.data.fine);
   };
 
   const getLocation = async () => {
@@ -103,8 +89,13 @@ const ValidityScreen = ({ route, navigation }) => {
       return;
     }
 
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
+    let location = await Location.getLastKnownPositionAsync({});
+    console.log(
+      '🚀 ~ file: ValidityScreen.js ~ line 114 ~ getLocation ~ location',
+      location
+    );
+
+    apiCall(location);
   };
   return (
     <VStack alignItems='center' space='4' mt='5'>

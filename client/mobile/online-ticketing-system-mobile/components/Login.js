@@ -23,21 +23,24 @@ const config = {
 };
 
 const Login = ({ navigation }) => {
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-  });
+  // const [data, setData] = useState({
+  //   email: '',
+  //   password: '',
+  // });
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const toast = useToast();
 
-  const { email, password } = data;
+  // const { email, password } = data;
 
   const onChange = (e) => {
+    e.target.value;
     setData({ ...data, [e.target.placeholder]: e.target.value });
   };
 
   const onSubmit = async () => {
-    // navigation.navigate('Inspector Dashboard');
     const data = {
       email,
       password,
@@ -45,7 +48,7 @@ const Login = ({ navigation }) => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/v1/auth/login',
+        'http://192.168.1.4:5000/api/v1/auth/login',
         data,
         config
       );
@@ -91,7 +94,7 @@ const Login = ({ navigation }) => {
             name='email'
             id={'email'}
             placeholder='email'
-            onChange={onChange}
+            onChangeText={setEmail}
           />
           <FormControl.Label mt={4}>Password</FormControl.Label>
           <Input
@@ -99,7 +102,7 @@ const Login = ({ navigation }) => {
             type='password'
             id={'password'}
             placeholder='password'
-            onChange={onChange}
+            onChangeText={setPassword}
           />
 
           <Button mt={6} onPress={onSubmit}>

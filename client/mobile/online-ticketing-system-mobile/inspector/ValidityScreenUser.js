@@ -21,11 +21,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Geocoder.init('AIzaSyBJ6etA3VFhb6LPKJ30iQj1Mf30o-OV4Ow');
 
 const ValidityScreenUser = ({ route, navigation }) => {
+  const { scanData, loggedUser } = route.params;
+
   const { id, creditAmount, accountId, email, passportNo, address, name, nic } =
-    route.params;
+    scanData;
 
   const [validity, setValidity] = useState('');
-  const [location, setLocation] = useState(null);
   const [account, setAccount] = useState('');
   const [fine, setFine] = useState('');
 
@@ -37,38 +38,26 @@ const ValidityScreenUser = ({ route, navigation }) => {
 
   useEffect(() => {
     getLocation();
-    getData();
   }, []);
 
-  useEffect(() => {
-    if (location) {
-      apiCall();
-    }
-  }, [location]);
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('account');
-
-      setAccount(JSON.parse(jsonValue));
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  const apiCall = async () => {
+  const apiCall = async (location) => {
     const data = {
       currentLocationLat: location.coords.latitude,
       currentLocationLong: location.coords.longitude,
       passengerId: accountId,
-      InspectorId: account.id,
+      InspectorId: loggedUser.id,
     };
+    console.log(
+      '🚀 ~ file: ValidityScreenUser.js ~ line 58 ~ apiCall ~ data',
+      data
+    );
 
     const res = await axios.post(
-      'http://localhost:5000/api/v1/ticket/valid-account',
+      'http://192.168.1.4:5000/api/v1/account/valid-account',
       data,
       config
     );
+
     setValidity(res.data.data.status);
     setFine(res.data.data.fine);
   };
@@ -81,7 +70,12 @@ const ValidityScreenUser = ({ route, navigation }) => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
+    console.log(
+      '🚀 ~ file: ValidityScreenUser.js ~ line 79 ~ getLocation ~ location',
+      location
+    );
+
+    apiCall(location);
   };
   return (
     <VStack alignItems='center' space='4' mt='5'>

@@ -58,13 +58,12 @@ const JourneyDetails = ({ route, navigation }) => {
     }
 
     setState(arr);
-    console.log(state);
   };
 
   const apiCall = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/v1/passenger/journey/account/${id}`
+        `http://192.168.1.4:5000/api/v1/passenger/journeyDetails/${id}`
       );
       dataMan(res.data.data);
     } catch (error) {}
@@ -127,8 +126,8 @@ const JourneyDetails = ({ route, navigation }) => {
           )}
           keyExtractor={(item) => item.id}
         />
-      ): (
-          <Center>No data</Center>
+      ) : (
+        <Center>No data</Center>
       )}
     </Box>
   );

@@ -15,9 +15,10 @@ import ValidityScreen from './ValidityScreen';
 const { width } = Dimensions.get('window');
 const qrSize = width * 0.7;
 
-const ScanUser = ({ navigation }) => {
+const ScanUser = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const currentUser = route.params;
 
   useEffect(() => {
     (async () => {
@@ -28,8 +29,10 @@ const ScanUser = ({ navigation }) => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    console.log(data);
-    navigation.navigate('User Validity', JSON.parse(data));
+    navigation.navigate('User Validity', {
+      scanData: JSON.parse(data),
+      loggedUser: currentUser,
+    });
   };
 
   if (hasPermission === null) {
