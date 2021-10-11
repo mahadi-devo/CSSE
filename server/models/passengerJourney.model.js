@@ -229,7 +229,21 @@ class PassengerJourney {
       );
 
       data.forEach((passenger) => {
-        body.push([{ text: passenger.account.id }, { text: passenger.account.passenger.name }, { text: passenger.createdAt }, { text: `${passenger.depatureLat} ${passenger.depatureLong}`, link: `http://maps.google.com/maps?q=${passenger.depatureLat},${passenger.depatureLong}` }, { text: `${passenger.destinationLat} ${passenger.destinationLong}`, link: `http://maps.google.com/maps?q=${passenger.destinationLat},${passenger.destinationLong}` }, { text: ((passenger.fare && passenger.fare['amount']) || null) }, { text: (passenger.fine && passenger.fine['amount']) || null }]);
+        body.push([
+          { text: passenger.account.id },
+          { text: passenger.account.passenger.name },
+          { text: passenger.createdAt },
+          {
+            text: `${passenger.depatureLat} ${passenger.depatureLong}`,
+            link: `http://maps.google.com/maps?q=${passenger.depatureLat},${passenger.depatureLong}`,
+          },
+          {
+            text: `${passenger.destinationLat} ${passenger.destinationLong}`,
+            link: `http://maps.google.com/maps?q=${passenger.destinationLat},${passenger.destinationLong}`,
+          },
+          { text: (passenger.fare && passenger.fare['amount']) || null },
+          { text: (passenger.fine && passenger.fine['amount']) || null },
+        ]);
       });
 
       const report = new REPORT(
@@ -246,7 +260,7 @@ class PassengerJourney {
     }
   }
 
-  async getPassengerJourney() {
+  async getPassengerJourneyByAccountId() {
     return await models.passengerhistory.findAll({
       include: [
         {
@@ -274,6 +288,45 @@ class PassengerJourney {
       ],
       where: { accountId: this.accountId },
     });
+  }
+
+  async getPassengerJourneyByJourneyId(id) {
+    try {
+      console.log(
+        '🚀 ~ file: passengerJourney.model.js ~ line 280 ~ PassengerJourney ~ getPassengerJourneyByJourneyId ~ id',
+        id
+      );
+      return await models.passengerhistory.findAll({
+        include: [
+          {
+            model: models.account,
+            as: 'account',
+            include: { model: models.passengers, as: 'passenger' },
+          },
+          {
+            model: models.journey,
+            as: 'journey',
+            include: {
+              model: models.inspection,
+              as: 'inspections',
+              include: { model: models.employee, as: 'inspector' },
+            },
+          },
+          {
+            model: models.fine,
+            as: 'fine',
+          },
+          {
+            model: models.fare,
+            as: 'fare',
+          },
+        ],
+        where: { id },
+      });
+    } catch (error) {
+      console.log(
+        '🚀 ~ file: passengerJourney.model.js ~ line 327 ~ PassengerJourney ~ error', error );
+    }
   }
 }
 
