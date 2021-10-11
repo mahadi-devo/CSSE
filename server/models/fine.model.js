@@ -14,7 +14,6 @@ class Fine {
             return await db.transaction(async (t) => {
                 await models.fine.create({
                     accountId: this.account.id,
-                    inspectionId: this.inspectionId,
                     amount,
                 }, { where: { transaction: t } })
             });
@@ -33,9 +32,9 @@ class Fine {
                 {latitude: currentLat, longitude: currentLong}
             )
 
-            const currentDistanceCost = Math.trunc(currentDistance * process.env.AMOUNT_PER_METER)
+            const currentDistanceCost = Math.trunc(currentDistance * process.env.FINE_AMOUNT_PER_METER)
 
-            if (currentDistanceCost < this.account.creditAmount) {
+            if (this.account.creditAmount < currentDistanceCost) {
                 return  currentDistanceCost * 2;
             } else {
                 return null;
