@@ -64,7 +64,7 @@ const JourneyDetails = ({ route, navigation }) => {
   const apiCall = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/v1/passenger/journeyDetails/36`
+        `http://localhost:5000/api/v1/passenger/journey/account/${id}`
       );
       dataMan(res.data.data);
     } catch (error) {}
@@ -76,7 +76,7 @@ const JourneyDetails = ({ route, navigation }) => {
         base: '100%',
         md: '25%',
       }}>
-      {state && (
+      {state.length > 0 ? (
         <FlatList
           mt='4'
           data={state}
@@ -127,6 +127,8 @@ const JourneyDetails = ({ route, navigation }) => {
           )}
           keyExtractor={(item) => item.id}
         />
+      ): (
+          <Center>No data</Center>
       )}
     </Box>
   );
