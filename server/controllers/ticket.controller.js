@@ -23,7 +23,7 @@ const createTicket = async (req, res, next) => {
 const checkTicketValidity = async (req, res, next) => {
   try {
     let ticket = new Ticket();
-    const data = await ticket.checkTicketValidity(req.body.inspectorId,req.body.ticketId, req.body.currentLocationLat, req.body.currentLocationLong);
+    const data = await ticket.checkTicketValidity(req.body.inspectorId, req.body.ticketId, req.body.currentLocationLat, req.body.currentLocationLong);
     res.status(200).json({
       data,
       success: true,
