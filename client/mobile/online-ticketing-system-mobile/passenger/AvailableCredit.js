@@ -14,8 +14,10 @@ import { StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AvailableCredit = ({ navigation }) => {
+const AvailableCredit = ({ route, navigation }) => {
   const [amount, setAmount] = useState();
+
+  const { id } = route.params;
 
   useEffect(() => {
     getData();
@@ -23,8 +25,8 @@ const AvailableCredit = ({ navigation }) => {
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('account');
-      setAmount(JSON.parse(jsonValue).creditAmount);
+      const res = await axios.get(`http://localhost:5000/api/v1/account/${id}`);
+      setAmount(res.data.data.creditAmount);
     } catch (e) {
       // error reading value
     }
@@ -44,7 +46,7 @@ const AvailableCredit = ({ navigation }) => {
         paddingRight='5'
         paddingBottom='10'>
         <Stack mx='4'>
-          <Heading mb='5'>{'Available Amount - Rs:' + amount}</Heading>
+          <Heading mb='5'>Available Amount - Rs: {amount && amount}</Heading>
           <Button onPress={() => navigation.navigate('TopUp')}>TopUp</Button>
         </Stack>
       </Box>

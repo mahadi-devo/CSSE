@@ -16,7 +16,6 @@ import axios from 'axios';
 
 Geocoder.init('AIzaSyBJ6etA3VFhb6LPKJ30iQj1Mf30o-OV4Ow');
 
-
 const getGeoCode = async (lat, long) => {
   let addressComponent;
   await Geocoder.from(lat, long)
@@ -29,55 +28,48 @@ const getGeoCode = async (lat, long) => {
   return addressComponent;
 };
 
-const JourneyDetails = ({ navigation }) => {
-  const [state, setState] = useState(null);
-  const [account, setAccount] = useState('');
-  const [data, setData] = useState('');
+const JourneyDetails = ({ route, navigation }) => {
+  const [state, setState] = useState('');
+
+  const { id } = route.params;
 
   useEffect(() => {
-    getData()
-    try {
-      const res = axios.get(`http://localhost/api/v1/journey/journeyDetails/${account.id}`);
-      setData(res.data.data);
-
-    } catch (error) {
-      
-    }
-    dataMan();
-    
+    apiCall();
   }, []);
 
-  const dataMan = async () => {
+  const dataMan = async (data) => {
     const arr = [];
     for (let index = 0; index < data.length; index++) {
       let obj = {
         id: data[index].id,
-        fair: data[index].fair,
+        fair: data[index].fare.amount,
         destination: await getGeoCode(
-          data[index].destinationLat,
-          data[index].destinationLong
+          parseInt(data[index].destinationLat),
+          parseInt(data[index].destinationLong)
         ),
         start: await getGeoCode(
-          data[index].issuedLocationLat,
-          data[index].issuedLocationLong
+          parseInt(data[index].depatureLat),
+          parseInt(data[index].depatureLong)
         ),
+        timeStamp: data[index].journey.createdAt,
       };
 
       arr.push(obj);
     }
 
     setState(arr);
+    console.log(state);
   };
 
-  const getData = async () => {
+  const apiCall = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('account');
-
-      setAccount(JSON.parse(jsonValue));
-    } catch (e) {
-      // error reading value
-    }
+      const res = await axios.get(
+        `http://localhost:5000/api/v1/passenger/journeyDetails/36`
+      );
+      dataMan(res.data.data);
+    } catch (error) {}
   };
+
   return (
     <Box
       w={{

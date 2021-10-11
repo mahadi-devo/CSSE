@@ -7,6 +7,7 @@ import {
   Box,
   Heading,
   Center,
+  useToast,
   Button,
   NativeBaseProvider,
 } from 'native-base';
@@ -20,13 +21,19 @@ const config = {
   },
 };
 
-const TopUpAccount = ({ navigation }) => {
+const TopUpAccount = ({ route, navigation }) => {
+  const { id } = route.params;
+
   const [data, setData] = useState({
     amount: '',
     cvc: '',
+    accountId: id,
+    paymentMethodId: 1,
     name: '',
     cardNumber: '',
   });
+
+  const toast = useToast();
 
   const onChange = (e) => {
     setData({ ...data, [e.target.placeholder]: e.target.value });
@@ -34,23 +41,15 @@ const TopUpAccount = ({ navigation }) => {
 
   const onSubmit = async () => {
     try {
-      const res = await axios.post(
-        'https://localhost/api/v1/account/payment',
+      const res = await axios.patch(
+        'http://localhost:5000/api/v1/account/payment',
         data,
         config
       );
+
+      toast.show({ description: 'TopUp Successfull' });
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const storeData = async (value) => {
-    try {
-      console.log(value);
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('account', jsonValue);
-    } catch (e) {
-      // saving error
     }
   };
 

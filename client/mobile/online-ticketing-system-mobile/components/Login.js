@@ -8,6 +8,7 @@ import {
   Text,
   Center,
   Pressable,
+  useToast,
   Button,
   NativeBaseProvider,
 } from 'native-base';
@@ -27,6 +28,8 @@ const Login = ({ navigation }) => {
     password: '',
   });
 
+  const toast = useToast();
+
   const { email, password } = data;
 
   const onChange = (e) => {
@@ -34,8 +37,7 @@ const Login = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    
-    
+    navigation.navigate('Inspector Dashboard');
     const data = {
       email,
       password,
@@ -43,12 +45,14 @@ const Login = ({ navigation }) => {
 
     try {
       const res = await axios.post(
-        'https://localhost:5000/api/v1/auth/login',
+        'http://a27b-112-134-228-132.ngrok.io/api/v1/auth/login',
         data,
         config
       );
 
       storeData(res.data.data);
+
+      toast.show({ description: 'Login successfull' });
 
       if (res.data.data.accountTypeId === 1) {
         navigation.navigate('Passenger Dashboard');

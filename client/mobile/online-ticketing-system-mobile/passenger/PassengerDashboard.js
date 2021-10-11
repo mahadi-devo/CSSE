@@ -17,20 +17,19 @@ const PassengerDashboard = ({ navigation }) => {
   const [account, setAccount] = useState('');
 
   useEffect(() => {
-    // const res = getData();
-    // setAccount(res);
+    getData();
   }, []);
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('account');
+      setAccount(JSON.parse(jsonValue));
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // error reading value
     }
   };
   return (
-    //   <Text>{JSON.stringify(account)}</Text>
     <Center mt='4' style={{ marginBottom: 'auto', marginTop: 'auto' }}>
       <VStack space={2.5} w='100%' alignItems='center'>
         <Flex
@@ -42,7 +41,7 @@ const PassengerDashboard = ({ navigation }) => {
           }}>
           <Pressable
             onPress={() => {
-              navigation.navigate('TopUp');
+              navigation.navigate('TopUp', account);
             }}
             _web={{
               cursor: 'pointer',
@@ -60,7 +59,7 @@ const PassengerDashboard = ({ navigation }) => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navigation.navigate('Journey Details');
+              navigation.navigate('Journey Details', account);
             }}
             _web={{
               cursor: 'pointer',
@@ -88,7 +87,7 @@ const PassengerDashboard = ({ navigation }) => {
           }}>
           <Pressable
             onPress={() => {
-              navigation.navigate('Available Credit');
+              navigation.navigate('Available Credit', account);
             }}
             _web={{
               cursor: 'pointer',

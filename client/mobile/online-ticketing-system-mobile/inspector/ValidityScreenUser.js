@@ -65,12 +65,12 @@ const ValidityScreenUser = ({ route, navigation }) => {
     };
 
     const res = await axios.post(
-      'http://localhost/api/v1/ticket/valid-account',
+      'http://localhost:5000/api/v1/ticket/valid-account',
       data,
       config
     );
     setValidity(res.data.data.status);
-    setFine(res.data.data.fine)
+    setFine(res.data.data.fine);
   };
 
   const getLocation = async () => {

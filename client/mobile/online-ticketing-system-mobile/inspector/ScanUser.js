@@ -28,6 +28,7 @@ const ScanUser = ({ navigation }) => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
+    console.log(data);
     navigation.navigate('User Validity', JSON.parse(data));
   };
 
