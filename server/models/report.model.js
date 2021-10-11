@@ -1,8 +1,7 @@
 const initModels = require("../dao/init-models");
 const db = require("../config/db");
 const models = initModels(db);
-const generatePdf = require('../common/reportTemplates/commonReportTemplate')
-
+const generatePdf = require('../common/reportTemplates/commonReportTemplate');
 class Report {
     constructor(name, description, reportTypeId) {
         this.name = name;
@@ -12,7 +11,7 @@ class Report {
     }
 
     async createReport(header, body) {
-        const report = models.report.create({
+        const report = await models.report.create({
             name: this.name,
             description: this.description,
             reportTypeId: this.reportTypeId,

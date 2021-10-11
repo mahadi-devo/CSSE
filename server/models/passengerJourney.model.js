@@ -215,47 +215,34 @@ class PassengerJourney {
 
       const header = [
         'Account Id',
+        'Passenger Name',
         'Date',
         'Departure',
         'Destination',
         'Fair',
         'Fines',
       ];
-      let body = [];
+      let body = [header];
 
       const data = passengerHistory.map((passenger) =>
         passenger.get({ plain: true })
       );
 
       data.forEach((passenger) => {
-        const detailsObj = {};
-        detailsObj.accountId = passenger.account.id;
-        detailsObj.accountId = passenger.account.passenger.name;
-        detailsObj.Date = passenger.createdAt;
-        detailsObj.depatureLocation = {
-          lat: passenger.depatureLat,
-          long: passenger.depatureLong,
-        };
-        detailsObj.destinationLocation = {
-          lat: passenger.destinationLat,
-          long: passenger.destinationLong,
-        };
-        detailsObj.fare = (passenger.fare && passenger.fare['amount']) || null;
-        detailsObj.fine = (passenger.fine && passenger.fine['amount']) || null;
-        body.push(detailsObj);
+        body.push([{ text: passenger.account.id }, { text: passenger.account.passenger.name }, { text: passenger.createdAt }, { text: `${passenger.depatureLat} ${passenger.depatureLong}`, link: `http://maps.google.com/maps?q=${passenger.depatureLat},${passenger.depatureLong}` }, { text: `${passenger.destinationLat} ${passenger.destinationLong}`, link: `http://maps.google.com/maps?q=${passenger.destinationLat},${passenger.destinationLong}` }, { text: ((passenger.fare && passenger.fare['amount']) || null) }, { text: (passenger.fine && passenger.fine['amount']) || null }]);
       });
 
-      // const report = new REPORT(
-      //   REPORTS.JOURNEY_DETAILS.title,
-      //   REPORTS.JOURNEY_DETAILS.description,
-      //   REPORTS.JOURNEY_DETAILS.type
-      // );
-      // const journeyDetailsReport = await report.createReport(header, body);
-      // const journeyDetailsReport = body;
+      const report = new REPORT(
+        REPORTS.JOURNEY_DETAILS.title,
+        REPORTS.JOURNEY_DETAILS.description,
+        REPORTS.JOURNEY_DETAILS.type
+      );
 
-      return { passengerHistory, body };
-    } catch (error) {
-      console.log("🚀 ~ file: passengerJourney.model.js ~ line 262 ~ PassengerJourney ~ getAllPassengerJourney ~ error", error)
+      const journeyDetailsReport = await report.createReport(header, body);
+
+      return { passengerHistory, journeyDetailsReport };
+    } catch (e) {
+      throw new Error(e);
     }
   }
 
