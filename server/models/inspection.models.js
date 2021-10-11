@@ -47,6 +47,23 @@ class Inspection {
             model: models.journey,
             as: 'journey',
           },
+          {
+            model: models.fine,
+            as: 'fines',
+            include: {
+              model: models.passengerhistory,
+              as: 'passengerhistories',
+              include: {
+                model: models.account,
+                attributes: ['id','email','creditAmount',],
+                as: 'account',
+                include: {
+                  model: models.passengers,
+                  as: 'passenger',
+                },
+              },
+            },
+          }
         ],
       });
 
@@ -141,6 +158,44 @@ class Inspection {
       return { inspection };
     } catch (e) {
       throw new Error(e);
+    }
+  }
+
+  async getInspectionDetailsByInspectorId(inspectorId) {
+    try {
+      const inspector = await models.inspection.findAll({
+        include: [
+          {
+            model: models.employee,
+            as: 'inspector',
+          },
+          {
+            model: models.journey,
+            as: 'journey',
+          },
+          {
+            model: models.fine,
+            as: 'fines',
+            include: {
+              model: models.passengerhistory,
+              as: 'passengerhistories',
+              include: {
+                model: models.account,
+                attributes: ['id','email','creditAmount',],
+                as: 'account',
+                include: {
+                  model: models.passengers,
+                  as: 'passenger',
+                },
+              },
+            },
+          }
+        ],
+        where: { inspectorId },
+      });
+      return {inspector};
+    } catch (error) {
+    console.log("🚀 ~ file: inspection.models.js ~ line 151 ~ Inspection ~ getInspectionDetailsByInspectorId ~ error", error)
     }
   }
 }
