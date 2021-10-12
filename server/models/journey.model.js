@@ -8,6 +8,7 @@ class Journey {
     this.routeId = routeId;
     this.startDateTime = new Date().toISOString();
     this.endDateTime = null;
+    this.id = null;
   }
 
   async isJournyExist(journeyId) {
@@ -25,6 +26,7 @@ class Journey {
         },
         { transaction: t }
       );
+      this.id = journey.id;
     });
   }
 
