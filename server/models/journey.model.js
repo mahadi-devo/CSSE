@@ -8,6 +8,7 @@ class Journey {
     this.routeId = routeId;
     this.startDateTime = new Date().toISOString();
     this.endDateTime = null;
+    this.id = null;
   }
 
   async isJournyExist(journeyId) {
@@ -25,6 +26,27 @@ class Journey {
         },
         { transaction: t }
       );
+      this.id = journey.id;
+    });
+  }
+
+  async endJourny() {
+    await db.transaction(async (t) => {
+      const journey = await models.journey.update(
+        {
+          busId: this.busId,
+          routeId: this.routeId,
+        },
+
+        {
+          where: {
+            busId: this.busId,
+            routeId: this.routeId,
+          },
+          transaction: t,
+        }
+      );
+      this.id = journey.id;
     });
   }
 
