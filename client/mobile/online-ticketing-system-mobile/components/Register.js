@@ -115,7 +115,7 @@ const Register = ({ navigation }) => {
 
           <FormControl.Label mt={4}>Password</FormControl.Label>
           <Input
-            type='text'
+            type='password'
             id={'password'}
             placeholder='password'
             onChange={onChange}
