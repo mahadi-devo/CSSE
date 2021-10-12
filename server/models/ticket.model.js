@@ -85,15 +85,21 @@ class Ticket {
         where: {id: ticketId},
       });
 
+      const inspector = await models.account.findOne({
+        where: {id: inspectorId},
+      });
+
       if (!ticket) {
         throw new Error("No ticket exist");
       }
+
+      if (!inspector) {
+        throw new Error("Inspector exist");
+      }
+
       let ticketStatus;
       const fine = new Fine();
-      const inspection = new Inspection(inspectorId, currentLat, currentLong)
-      await db.transaction(async (t) => {
-        await inspection.createInspection(t)
-      });
+      const inspection = new Inspection(inspector.employeeId, currentLat, currentLong)
       if (ticket.ticketTypeId === TicketType.One_Way_Ticket) {
 
         const {fineValue, currentDistance} = fine.calculateFineByDistanceForTicket(ticket, currentLat, currentLong);
@@ -129,6 +135,10 @@ class Ticket {
           };
         }
       }
+
+      await db.transaction(async (t) => {
+        await inspection.createInspection(t)
+      });
 
       return ticketStatus;
     } catch (e) {

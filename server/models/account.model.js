@@ -185,36 +185,33 @@ class Account {
       const inspection = new Inspection(inspector.employeeId, currentLat, currentLong, passengerHistory.journeyId)
       const fineAmount = await fine.calculateFineByDistanceForPassenger(passengerHistory, currentLat, currentLong);
 
-      await db.transaction(async (t) => {
+      return await db.transaction(async (t) => {
         await inspection.createInspection(t);
         if (fineAmount) {
           await fine.createFine(fineAmount, t)
-          await models.account.update(
-              {
-                creditAmount: `${(fine - Number(passenger.creditAmount))}`,
-              },
-              { where: { id: passenger.id }, transaction: t }
-          );
+          // await models.account.update(
+          //     {
+          //       creditAmount: `${(fineAmount - Number(passenger.creditAmount))}`,
+          //     },
+          //     { where: { id: passenger.id }, transaction: t }
+          // );
           await models.passengerhistory.update(
               {
                 fineId: fine.id,
               },
               { where: { accountId: passenger.id }, transaction: t }
           );
+          return {
+            status: Status.Invalid,
+            fine: fineAmount
+          };
+        } else {
+          return {
+            status: Status.Valid,
+            fine: null
+          };
         }
       });
-
-      if (fineAmount) {
-        return {
-          status: Status.Invalid,
-          fine: fineAmount
-        };
-      } else {
-        return {
-          status: Status.Valid,
-          fine: null
-        };
-      }
 
     } catch (e) {
       throw new Error(e);
