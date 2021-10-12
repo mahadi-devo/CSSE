@@ -30,6 +30,26 @@ class Journey {
     });
   }
 
+  async endJourny() {
+    await db.transaction(async (t) => {
+      const journey = await models.journey.update(
+        {
+          busId: this.busId,
+          routeId: this.routeId,
+        },
+
+        {
+          where: {
+            busId: this.busId,
+            routeId: this.routeId,
+          },
+          transaction: t,
+        }
+      );
+      this.id = journey.id;
+    });
+  }
+
   async getJourny(journeyId) {
     try {
       return models.journey.findOne({

@@ -25,12 +25,22 @@ const onJourney = (props) => {
   const { navigation, route } = props;
 
   const [journeyId, setJourneyId] = useState(route.params.journeyId);
+  const [busId, setbusId] = useState(route.params.busId);
+  const [routeId, setrouteIdId] = useState(route.params.routeId);
 
   const handelOnPress = async () => {
-    navigation.navigate('Scanner',{journeyId});
+    navigation.navigate('Scanner', { journeyId });
   };
 
   const handelStopOnPress = () => {
+    const res = await axios.put(
+      'http://192.168.8.102:5000/api/v1/journey',
+      {
+        busId,
+        routeId,
+      },
+      config
+    );
     navigation.pop();
   };
 
@@ -54,7 +64,7 @@ const onJourney = (props) => {
             }}
             color="primary.50"
             fontSize="lg"
-            bold 
+            bold
             fontSize="xl"
           >
             Scan a Card
@@ -77,7 +87,7 @@ const onJourney = (props) => {
             }}
             color="primary.50"
             fontSize="lg"
-            bold 
+            bold
             fontSize="xl"
           >
             Stop Journey

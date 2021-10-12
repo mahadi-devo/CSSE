@@ -50,4 +50,21 @@ const getAllJourney = async (req, res, next) => {
   }
 };
 
-module.exports = { createJourney, getJourney, getAllJourney };
+const endJourny = async (req, res, next) => {
+  try {
+    const { busId, routeId } = req.body;
+    
+    let journey = new Journey(busId, routeId);
+
+    await journey.endJourny();
+
+    res.status(200).json({
+      success: true,
+      data: journey,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = { createJourney, getJourney, getAllJourney, endJourny };

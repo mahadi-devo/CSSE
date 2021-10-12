@@ -33,7 +33,11 @@ const JourneyCreate = ({ navigation }) => {
       },
       config
     );
-    navigation.navigate('On Journey',{journeyId: res.data.data.id});
+    navigation.navigate('On Journey', {
+      journeyId: res.data.data.id,
+      busId: bus,
+      routeId: route,
+    });
   };
 
   return (
