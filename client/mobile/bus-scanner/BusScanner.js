@@ -47,7 +47,7 @@ export default function BusScanner({ navigation, route }) {
     const obj = JSON.parse(data);
 
     if (obj.creditAmount == 0 || obj.price == 0) {
-      alert(`Not Valid ${data}`);
+      alert(`Not Valid`);
     } else {
       navigation.goBack();
       const res = await axios.post(
@@ -62,7 +62,7 @@ export default function BusScanner({ navigation, route }) {
         },
         config
       );
-      alert(`valid ${data}`);
+      alert(`successfully Scaned`);
     }
   };
 
